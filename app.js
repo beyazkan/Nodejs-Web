@@ -1,13 +1,10 @@
-const path = require('path');
+const url = require('url');
 
-let result = path.resolve('app.js');
+const address = "https://msoguz.com/kurslar?year=2019&month=nisan";
 
-result = path.extname('app.js');
-result = path.parse(__filename);
+let result = url.parse(address, true);
 
-console.log(result.root);
-console.log(result.dir);
-console.log(result.base);
-console.log(result.ext);
-console.log(result.name);
 console.log(result);
+console.log(result.path);
+console.log(result.query.year);
+console.log(result.query.month);
