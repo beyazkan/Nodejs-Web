@@ -1,3 +1,5 @@
-// Browser
+const path = require('path');
 
-// Nodejs
+let result = path.resolve('app.js');
+
+console.log(result);
