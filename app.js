@@ -1,8 +1,4 @@
-const http = require('http');
-const routes = require('./routes.js');
+var _ = require('underscore');
 
-const server = http.createServer(routes);
-
-server.listen(3000);
-console.log('Listening port on 3000');
-
+var numbers = [10, 5, 100, 2, 1000];
+console.log(_.max(numbers));
