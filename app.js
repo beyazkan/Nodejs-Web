@@ -1,31 +1,21 @@
 const express = require('express');
 const app = express();
+
 const bodyParser = require('body-parser');
+
+// Import Routes Modules
+const adminRoutes = require('./routes/admin.js');
+const userRoutes = require('./routes/user.js');
 
 app.use(bodyParser.urlencoded({extended:false}));
 
-app.get('/add-product', (req,res,next) => {
-    res.send(`
-        <html>
-            <head><title>Add a New Product</title></head>
-            <body>
-                <form action="/product" method="POST">
-                    <input type="text" name="productName">
-                    <input type="submit" value="Save Product">
-            </body>
-        </html>
-    `);
-});
+// Routes
+app.use('/admin', adminRoutes);
+app.use(userRoutes);
 
-app.post('/product', (req, res) => {
-    // Database Kayıt
-    console.log(req.body);
-
-    res.redirect('/');
-});
-
-app.get('/', (req,res,next) => {
-    res.send("<h1>Merhaba Dünya</h1>");
+// 404 Hatası
+app.use((req, res) => {
+    res.status(404).send('<h1>404 - Page not found</h1>');
 });
 
 app.listen(3000, () => {
