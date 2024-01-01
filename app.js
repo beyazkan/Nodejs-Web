@@ -9,6 +9,7 @@ const adminRoutes = require('./routes/admin.js');
 const userRoutes = require('./routes/user.js');
 
 app.use(bodyParser.urlencoded({extended:false}));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Routes
 app.use('/admin', adminRoutes);
