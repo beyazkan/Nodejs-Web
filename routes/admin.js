@@ -17,7 +17,7 @@ router.post('/add-product', (req, res, next) => {
     res.redirect(prefix_url);
 });
 router.get('/', (req, res, next) => {
-    res.sendFile(path.join(__dirname, '../', 'views', 'admin-index.html'));
+    res.render('admin-index');
 });
 
 module.exports = router;
