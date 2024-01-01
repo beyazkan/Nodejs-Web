@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const path = require('path');
 
 const bodyParser = require('body-parser');
 
@@ -15,7 +16,7 @@ app.use(userRoutes);
 
 // 404 Hatası
 app.use((req, res) => {
-    res.status(404).send('<h1>404 - Page not found</h1>');
+    res.status(404).sendFile(path.join(__dirname, 'views', '404.html'));
 });
 
 app.listen(3000, () => {

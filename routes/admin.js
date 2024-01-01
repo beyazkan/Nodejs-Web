@@ -1,20 +1,12 @@
 const express = require('express');
 const router = express.Router();
+const path = require('path');
 
 // Ön ek adres '/admin'
 const prefix_url = '/admin'
 
 router.get('/add-product', (req, res, next) => {
-    res.send(`
-        <html>
-            <head><title>Add a New Product</title></head>
-            <body>
-                <form action="${prefix_url}/add-product" method="POST">
-                    <input type="text" name="productName">
-                    <input type="submit" value="Save Product">
-            </body>
-        </html>
-    `);
+    res.sendFile(path.join(__dirname, '../', 'views', 'add-product.html'));
 });
 
 router.post('/add-product', (req, res, next) => {
@@ -25,7 +17,7 @@ router.post('/add-product', (req, res, next) => {
 });
 
 router.get('/', (req, res, next) => {
-    res.send('Admin Sayfası');
+    res.sendFile(path.join(__dirname, '../', 'views', 'admin-index.html'));
 });
 
 module.exports = router;
