@@ -4,11 +4,12 @@
   "description": "Web Dersleri",
   "main": "app.js",
   "scripts": {
+    "start": "nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "underscore": "^1.13.6"
+    "express": "^4.18.2"
   }
 }
