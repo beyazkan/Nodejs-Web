@@ -1,20 +1,30 @@
 const express = require('express');
 const app = express();
+const bodyParser = require('body-parser');
 
-app.use('/', (req,res,next) => {
-    console.log("Loglama Yapıldı.");
-    next();
+app.use(bodyParser.urlencoded({extended:false}));
+
+app.get('/add-product', (req,res,next) => {
+    res.send(`
+        <html>
+            <head><title>Add a New Product</title></head>
+            <body>
+                <form action="/product" method="POST">
+                    <input type="text" name="productName">
+                    <input type="submit" value="Save Product">
+            </body>
+        </html>
+    `);
 });
 
-app.use('/add-product', (req,res,next) => {
-    res.send("<h1>Adding product page</h1>");
+app.post('/product', (req, res) => {
+    // Database Kayıt
+    console.log(req.body);
+
+    res.redirect('/');
 });
 
-app.use('/product-list', (req,res,next) => {
-    res.send("<h1>Product list page</h1>");
-});
-
-app.use('/', (req,res,next) => {
+app.get('/', (req,res,next) => {
     res.send("<h1>Merhaba Dünya</h1>");
 });
 
