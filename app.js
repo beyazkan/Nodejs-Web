@@ -4,6 +4,10 @@ const path = require('path');
 
 const bodyParser = require('body-parser');
 
+// App Set
+app.set('view engine', 'pug');
+app.set('views', './views');
+
 // Import Routes Modules
 const adminRoutes = require('./routes/admin.js');
 const userRoutes = require('./routes/user.js');
