@@ -9,20 +9,20 @@ app.set('view engine', 'pug');
 app.set('views', './views');
 
 // Import Routes Modules
-const admin = require('./routes/admin.js');
+const adminRoutes = require('./routes/admin.js');
 const userRoutes = require('./routes/user.js');
+
+const errorController = require('./controllers/errors.js');
 
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Routes
-app.use('/admin', admin.routes);
+app.use('/admin', adminRoutes);
 app.use(userRoutes);
 
 // 404 Hatası
-app.use((req, res) => {
-    res.status(404).render('404');
-});
+app.use(errorController.get404Page);
 
 app.listen(3000, () => {
     console.log('Listening on port 3000');
