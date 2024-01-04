@@ -9,14 +9,14 @@ app.set('view engine', 'pug');
 app.set('views', './views');
 
 // Import Routes Modules
-const adminRoutes = require('./routes/admin.js');
+const admin = require('./routes/admin.js');
 const userRoutes = require('./routes/user.js');
 
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Routes
-app.use('/admin', adminRoutes);
+app.use('/admin', admin.routes);
 app.use(userRoutes);
 
 // 404 Hatası
