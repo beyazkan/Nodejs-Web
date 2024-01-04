@@ -1,12 +1,9 @@
-const products =[
-    {name: 'Samsung S8', price: 3000, image: '1.jpg', description: 'Kaydırmalı, böyle dokunmatik telefon...'},
-    {name: 'Samsung S7', price: 2000, image: '2.jpg', description: 'Çok iyi...'},
-    {name: 'Samsung S9', price: 4000, image: '3.jpg', description: 'İdare Eder...'},
-    {name: 'Iphone 7S', price: 4500, image: '4.jpg', description: '5G destekli telefon...'}
-];
+const Product = require('../models/product.js');
 
 exports.getProducts = (req, res, next) => {
 
+    const products = Product.getAll();
+    
     res.render('index', {
         title: 'Anasayfa', 
         products: products,
@@ -24,7 +21,13 @@ exports.getAddProduct = (req, res, next) => {
 exports.postAddProduct = (req, res, next) => {
     // Database Kayıt
     console.log(req.body);
-    products.push({name: req.body.name, price: req.body.price, image: req.body.Image, description: req.body.description});
+    const product = new Product(
+        req.body.name, 
+        req.body.price, 
+        req.body.imageUrl, 
+        req.body.description
+        );
+    product.saveProduct();
     //res.redirect(prefix_url);
     res.redirect('/');
 };
