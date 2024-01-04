@@ -10,7 +10,7 @@ app.set('views', './views');
 
 // Import Routes Modules
 const adminRoutes = require('./routes/admin.js');
-const userRoutes = require('./routes/user.js');
+const userRoutes = require('./routes/shop.js');
 
 const errorController = require('./controllers/errors.js');
 

@@ -1,16 +1,5 @@
 const Product = require('../models/product.js');
 
-exports.getProducts = (req, res, next) => {
-
-    const products = Product.getAll();
-    
-    res.render('index', {
-        title: 'Anasayfa', 
-        products: products,
-        path: '/'
-    });
-};
-
 exports.getAddProduct = (req, res, next) => {
     res.render('add-product', {
         title: 'Ürün Ekle',
