@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const productsController = require('../controllers/products.js');
+const productsController = require('../controllers/shop.js');
 
 // Ön ek adres '/admin'
 const prefix_url = '/admin'
