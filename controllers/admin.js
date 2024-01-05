@@ -1,7 +1,19 @@
 const Product = require('../models/product.js');
 
+exports.getProducts = (req, res, next) => {
+    const products = Product.getAll();
+    res.render(
+        './admin/products',
+        {
+            title: 'Admin Product List',
+            products: products,
+            path: '/admin/products'
+        }
+    )
+};
+
 exports.getAddProduct = (req, res, next) => {
-    res.render('add-product', {
+    res.render('./admin/add-product', {
         title: 'Ürün Ekle',
         path: '/admin/add-product'
     });
@@ -21,8 +33,22 @@ exports.postAddProduct = (req, res, next) => {
     res.redirect('/');
 };
 
+exports.getEditProduct = (req, res, next) => {
+    res.render('./admin/edit-product', {
+        title: 'Ürün Düzenle',
+        path: '/admin/edit-product'
+    });
+};
+
+exports.postEditProduct = (req, res, next) => {
+    // Database Kayıt
+    
+    //res.redirect(prefix_url);
+    res.redirect('/');
+};
+
 exports.adminIndex = (req, res, next) => {
-    res.render('admin-index', {
+    res.render('./admin/index.pug', {
         title: 'Admin Anasayfa',
         path: '/admin'
     });
