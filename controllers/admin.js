@@ -2,18 +2,17 @@ const Product = require('../models/product.js');
 
 exports.getProducts = (req, res, next) => {
     const products = Product.getAll();
-    res.render(
-        './admin/products',
-        {
+
+    res.render('./admin/products.pug',{
             title: 'Admin Product List',
             products: products,
             path: '/admin/products'
         }
-    )
+    );
 };
 
 exports.getAddProduct = (req, res, next) => {
-    res.render('./admin/add-product', {
+    res.render('./admin/add-product.pug', {
         title: 'Ürün Ekle',
         path: '/admin/add-product'
     });
@@ -34,7 +33,7 @@ exports.postAddProduct = (req, res, next) => {
 };
 
 exports.getEditProduct = (req, res, next) => {
-    res.render('./admin/edit-product', {
+    res.render('./admin/edit-product.pug', {
         title: 'Ürün Düzenle',
         path: '/admin/edit-product'
     });
