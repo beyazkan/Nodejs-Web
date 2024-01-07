@@ -33,17 +33,28 @@ exports.postAddProduct = (req, res, next) => {
 };
 
 exports.getEditProduct = (req, res, next) => {
+    const product = Product.getById(req.params.productid);
+
     res.render('./admin/edit-product.pug', {
         title: 'Ürün Düzenle',
+        product: product,
         path: '/admin/edit-product'
     });
 };
 
 exports.postEditProduct = (req, res, next) => {
     // Database Kayıt
+    const product = Product.getById(req.body.id);
+
+    product.name = req.body.name;
+    product.price = req.body.price;
+    product.imageUrl = req.body.imageUrl;
+    product.description = req.body.description;
+
+    Product.Update(product);
     
     //res.redirect(prefix_url);
-    res.redirect('/');
+    res.redirect('/admin/products');
 };
 
 exports.adminIndex = (req, res, next) => {

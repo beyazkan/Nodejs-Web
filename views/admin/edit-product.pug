@@ -5,22 +5,23 @@ block styles
 
 block content
     form(action="/admin/edit-product" method="POST")
+        input#id(type="hidden" name="id" value=`${product.id}`)
         .form-group.row
             label(for="name").col-sm-2.col-form-label Product Name
             .col-sm-10
-                input(type="text" name="name").form-control#name
+                input(type="text" name="name" value=`${product.name}`).form-control#name
         .form-group.row
             label(for="price").col-sm-2.col-form-label Price
             .col-sm-10
-                input(type="text" name="price").form-control#price
+                input(type="text" name="price" value=`${product.price}`).form-control#price
         .form-group.row
             label(for="imageUrl").col-sm-2.col-form-label Image
             .col-sm-10
-                input(type="text" name="imageUrl").form-control#imageUrl
+                input(type="text" name="imageUrl" value=`${product.imageUrl}`).form-control#imageUrl
         .form-group.row
             label(for="description").col-sm-2.col-form-label Description
             .col-sm-10
-                input(type="text" name="description").form-control#description
+                textarea#description(name="description" cols="30" rows="10").form-control #{product.description}
         
         .form-group.row
             .col-sm-10.offset-sm-2
