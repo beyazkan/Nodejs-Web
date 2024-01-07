@@ -6,7 +6,8 @@ exports.getProducts = (req, res, next) => {
     res.render('./admin/products.pug',{
             title: 'Admin Product List',
             products: products,
-            path: '/admin/products'
+            path: '/admin/products',
+            action: req.query.action
         }
     );
 };
@@ -54,7 +55,7 @@ exports.postEditProduct = (req, res, next) => {
     Product.Update(product);
     
     //res.redirect(prefix_url);
-    res.redirect('/admin/products');
+    res.redirect('/admin/products?action=edit');
 };
 
 exports.adminIndex = (req, res, next) => {
@@ -62,4 +63,9 @@ exports.adminIndex = (req, res, next) => {
         title: 'Admin Anasayfa',
         path: '/admin'
     });
+};
+
+exports.postDeleteProduct = (req, res, next) => {
+    Product.DeleteById(req.body.id);
+    res.redirect('/admin/products?action=delete');
 };
