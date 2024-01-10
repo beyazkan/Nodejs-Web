@@ -3,11 +3,16 @@ extends ../layouts/main-layout.pug
 include ../mixins/createProduct.pug
 
 block content
-    include ../includes/slider.pug
-    
+
     .row
-        if products.length > 0
-            each product in products
-                +createProduct(product)
-        else
-            h2 Herhangi bir ürün bulunmamaktadır.
+        .col-md-3
+            include ../includes/menu.pug
+        .col-md-9
+            include ../includes/slider.pug
+    
+            .row
+                if products.length > 0
+                    each product in products
+                        +createProduct(product)
+                else
+                    h2 Herhangi bir ürün bulunmamaktadır.
