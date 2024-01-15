@@ -36,7 +36,8 @@ exports.getProductsByCategoryId = (req, res, next) => {
         title: 'Products', 
         products: products,
         categories: categories,
-        path: '/products'
+        selectedCategory: categoryId,
+        path: '/categories'
     });
 };
 
@@ -51,16 +52,6 @@ exports.getProduct = (req, res, next) => {
         product: product,
         categories: categories,
         path: '/products' 
-    });
-};
-
-exports.getProductDetails = (req, res, next) => {
-
-    const products = Product.getAll();
-    
-    res.render('shop/details', {
-        title: 'Details', 
-        path: '/details'
     });
 };
 

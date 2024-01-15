@@ -5,9 +5,8 @@ const shopController = require('../controllers/shop.js');
 
 router.get('/', shopController.getIndex);
 router.get('/products', shopController.getProducts);
-router.get('/product/:productid', shopController.getProduct);
+router.get('/product/details/:productid', shopController.getProduct);
 router.get('/categories/:categoryid', shopController.getProductsByCategoryId);
-router.get('/details', shopController.getProductDetails);
 router.get('/cart', shopController.getCart);
 router.get('/orders', shopController.getOrders);
 

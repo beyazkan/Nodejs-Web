@@ -1,5 +1,5 @@
 .list-group
-    a(href='/products').list-group-item Tümü
+    a(href='/products' class=path==='/products'?"list-group-item active":"list-group-item").list-group-item Tümü
     if categories.length > 0
         each category in categories
-            a(href=`/categories/${category.id}`).list-group-item #{category.name}
+            a(href=`/categories/${category.id}` class=category.id===selectedCategory?"list-group-item active":"list-group-item") #{category.name}
