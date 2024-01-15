@@ -18,6 +18,13 @@ block content
             .col-sm-10
                 input(type="text" name="imageUrl").form-control#imageUrl
         .form-group.row
+            label(for="categoryid").col-sm-2.col-form-label Kategori
+            .col-sm-10
+                select.form-control#categoryid(name="categoryid")
+                    option(value="-1") Kategori Seçiniz
+                    each category in categories 
+                        option(value=`${category.id}`) #{category.name}
+        .form-group.row
             label(for="description").col-sm-2.col-form-label Description
             .col-sm-10
                 textarea#description(name="description" cols="30" rows="10").form-control
