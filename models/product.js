@@ -1,8 +1,13 @@
 const products = [
-    {id:'1231', name:'Samsung S6', price: 2000, imageUrl: '1.jpg', description: 'İyi telefon'},
-    {id:'4212', name:'Samsung S7', price: 2000, imageUrl: '2.jpg', description: 'Fiyat performans'},
-    {id:'3421', name:'Samsung S8', price: 2000, imageUrl: '3.jpg', description: 'İyi telefon'},
-    {id:'2332', name:'Samsung S9', price: 2000, imageUrl: '4.jpg', description: 'İyi telefon'}
+    {id:'1231', name:'Samsung S6', price: 2000, imageUrl: '1.jpg', description: 'İyi telefon', categoryId: "1"},
+    {id:'4212', name:'Samsung S7', price: 2000, imageUrl: '2.jpg', description: 'Fiyat performans', categoryId: "1"},
+    {id:'3421', name:'Samsung S8', price: 2000, imageUrl: '3.jpg', description: 'İyi telefon', categoryId: "1"},
+    {id:'2332', name:'Samsung S9', price: 2000, imageUrl: '4.jpg', description: 'İyi telefon', categoryId: "1"},
+    {id:'1232', name:'Lenovo Bilgisayar', price: 5000, imageUrl: '1.jpg', description: 'Masaüstü pc', categoryId: "2"},
+    {id:'5123', name:'Casper PC', price: 7000, imageUrl: '2.jpg', description: 'Laptop Dizüstü', categoryId: "2"},
+    {id:'6712', name:'Arçelik Buzdolabı', price: 3500, imageUrl: '3.jpg', description: '5 zamanlı çamaşır makinesi', categoryId: "3"},
+    {id:'6412', name:'Samsung Klima', price: 28000, imageUrl: '4.jpg', description: 'İyi telefon', categoryId: "3"},
+    {id:'5122', name:'Asus RX4590', price: 12000, imageUrl: '1.jpg', description: 'Masaüstü Ekran Kartı', categoryId: "2"}
 ];
 
 module.exports = class Product{
@@ -26,6 +31,10 @@ module.exports = class Product{
     static getById(id){
         const product = products.find(i => i.id === id);
         return product;
+    }
+
+    static getProductsByCategoryId(categoryid){
+        return products.filter(i => i.categoryId === categoryid);
     }
 
     static Update(product){
