@@ -2,15 +2,18 @@ const Product = require('../models/product.js');
 const Category = require('../models/category.js');
 
 exports.getProducts = (req, res, next) => {
-    const products = Product.getAll();
-
-    res.render('./admin/products.pug',{
-            title: 'Admin Product List',
-            products: products,
-            path: '/admin/products',
-            action: req.query.action
-        }
-    );
+    Product.getAll()
+            .then(products => {
+                res.render('./admin/products.pug',{
+                    title: 'Admin Product List',
+                    products: products[0],
+                    path: '/admin/products',
+                    action: req.query.action
+                });
+            })
+            .catch((error) => {
+                console.log(error);
+            });
 };
 
 exports.getAddProduct = (req, res, next) => {
@@ -24,28 +27,39 @@ exports.getAddProduct = (req, res, next) => {
 
 exports.postAddProduct = (req, res, next) => {
     // Database Kayıt
-    console.log(req.body);
     const product = new Product();
     product.name = req.body.name;
     product.price = req.body.price;
     product.imageUrl = req.body.imageUrl;
     product.description = req.body.description;
     product.categoryId = req.body.categoryid;
-    product.saveProduct();
-    //res.redirect(prefix_url);
-    res.redirect('/');
+    product.saveProduct()
+    .then(() => {
+        //res.redirect(prefix_url);
+        res.redirect('/');
+    })
+    .catch((error) => {
+        console.log(error);
+    });
 };
 
 exports.getEditProduct = (req, res, next) => {
-    const product = Product.getById(req.params.productid);
+    const productId = req.params.productid
     const categories = Category.getAll();
 
-    res.render('./admin/edit-product.pug', {
-        title: 'Ürün Düzenle',
-        product: product,
-        path: '/admin/edit-product',
-        categories: categories
+    Product.getById(productId)
+    .then((product) => {
+        res.render('./admin/edit-product.pug', {
+            title: 'Ürün Düzenle',
+            product: product[0][0],
+            path: '/admin/edit-product',
+            categories: categories
+        });
+    })
+    .catch((error) => {
+        console.log(error);
     });
+    
 };
 
 exports.postEditProduct = (req, res, next) => {

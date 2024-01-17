@@ -3,28 +3,37 @@ const Category = require('../models/category.js');
 
 exports.getIndex = (req, res, next) => {
 
-    const products = Product.getAll();
     const categories = Category.getAll();
-    
-    res.render('shop/index', {
-        title: 'Shopping', 
-        products: products,
-        categories: categories,
-        path: '/'
-    });
+    Product.getAll()
+            .then(products => {
+                    res.render('shop/index', {
+                    title: 'Shopping', 
+                    products: products[0],
+                    categories: categories,
+                    path: '/'
+                });
+            })
+            .catch((error) => {
+                console.log(error);
+            });
 };
 
 exports.getProducts = (req, res, next) => {
 
-    const products = Product.getAll();
     const categories = Category.getAll();
-    
-    res.render('shop/products', {
-        title: 'Products', 
-        products: products,
-        categories: categories,
-        path: '/products'
-    });
+
+    Product.getAll()
+            .then(products => {
+                res.render('shop/products', {
+                    title: 'Products', 
+                    products: products[0],
+                    categories: categories,
+                    path: '/products'
+                });
+            })
+            .catch((error) => {
+                console.log(error);
+            });
 };
 
 exports.getProductsByCategoryId = (req, res, next) => {
@@ -44,14 +53,18 @@ exports.getProductsByCategoryId = (req, res, next) => {
 exports.getProduct = (req, res, next) => {
 
     const productId = req.params.productid;
-    const product = Product.getById(productId);
     const categories = Category.getAll();
 
-    res.render('shop/product-detail', {
-        title:product.name,
-        product: product,
-        categories: categories,
-        path: '/products' 
+    Product.getById(productId)
+    .then((product) => {
+        res.render('shop/product-detail', {
+            title:product[0][0].name,
+            product: product[0][0],
+            categories: categories,
+            path: '/products' 
+        });
+    }).catch((error) => {
+        console.log(error);
     });
 };
 
