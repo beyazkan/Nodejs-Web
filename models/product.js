@@ -12,7 +12,7 @@ module.exports = class Product{
     }
 
     saveProduct(){
-        return connection.execute('INSERT INTO products (name, price, imageUrl, description) VALUES (?, ?, ?, ?)', [this.name, this.price, this.imageUrl, this.description]);
+        return connection.execute('INSERT INTO products (name, price, imageUrl, description, categoryid) VALUES (?, ?, ?, ?, ?)', [this.name, this.price, this.imageUrl, this.description, this.categoryId]);
     }
 
     static getAll(){
@@ -27,9 +27,10 @@ module.exports = class Product{
     }
 
     static Update(product){
-        return connection.execute('UPDATE products p SET p.name=?, p.price=?, p.imageUrl=?, p.description=? WHERE p.id=?', [product.name, product.price, product.imageUrl, product.description, product.id]);
+        return connection.execute('UPDATE products p SET p.name=?, p.price=?, p.imageUrl=?, p.description=?, p.categoryId=? WHERE p.id=?', [product.name, product.price, product.imageUrl, product.description, product.categoryId, product.id]);
     }
 
     static DeleteById(id){
+        return connection.execute('DELETE FROM products p WHERE p.id=?',[id]);
     }
 }

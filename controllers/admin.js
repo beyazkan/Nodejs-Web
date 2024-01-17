@@ -17,12 +17,18 @@ exports.getProducts = (req, res, next) => {
 };
 
 exports.getAddProduct = (req, res, next) => {
-    const categories = Category.getAll();
-    res.render('./admin/add-product.pug', {
-        title: 'Ürün Ekle',
-        path: '/admin/add-product',
-        categories: categories
+    Category.getAll()
+    .then((categories)=>{
+        res.render('./admin/add-product.pug', {
+            title: 'Ürün Ekle',
+            path: '/admin/add-product',
+            categories: categories
+        });
+    })
+    .catch((error)=>{
+        console.log(error);
     });
+    
 };
 
 exports.postAddProduct = (req, res, next) => {
@@ -91,6 +97,12 @@ exports.adminIndex = (req, res, next) => {
 };
 
 exports.postDeleteProduct = (req, res, next) => {
-    Product.DeleteById(req.body.id);
-    res.redirect('/admin/products?action=delete');
+    Product.DeleteById(req.body.productid)
+    .then(()=> {
+        res.redirect('/admin/products?action=delete');
+    })
+    .catch((error)=> {
+        console.log(error);
+    });
+    
 };
