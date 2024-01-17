@@ -64,18 +64,23 @@ exports.getEditProduct = (req, res, next) => {
 
 exports.postEditProduct = (req, res, next) => {
     // Database Kayıt
-    const product = Product.getById(req.body.id);
+    const product = new Product();
 
+    product.id = req.body.id;
     product.name = req.body.name;
     product.price = req.body.price;
     product.imageUrl = req.body.imageUrl;
     product.description = req.body.description;
     product.categoryId = req.body.categoryid;
 
-    Product.Update(product);
-    
-    //res.redirect(prefix_url);
-    res.redirect('/admin/products?action=edit');
+    Product.Update(product)
+    .then(()=>{
+        //res.redirect(prefix_url);
+        res.redirect('/admin/products?action=edit')
+    })
+    .catch((error)=> {
+        console.log(error);
+    });
 };
 
 exports.adminIndex = (req, res, next) => {
