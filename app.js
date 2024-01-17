@@ -8,6 +8,9 @@ const bodyParser = require('body-parser');
 app.set('view engine', 'pug');
 app.set('views', './views');
 
+// Database
+const connection = require('./utility/database.js');
+
 // Import Routes Modules
 const adminRoutes = require('./routes/admin.js');
 const userRoutes = require('./routes/shop.js');
@@ -20,6 +23,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Routes
 app.use('/admin', adminRoutes);
 app.use(userRoutes);
+
+connection.execute('SELECT * FROM products')
+    .then((result) => {
+        console.log(result[0]);
+    }).catch((error) => {
+        console.log(error);
+    });
 
 // 404 Hatası
 app.use(errorController.get404Page);
