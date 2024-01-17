@@ -3,51 +3,73 @@ const Category = require('../models/category.js');
 
 exports.getIndex = (req, res, next) => {
 
-    const categories = Category.getAll();
-    Product.getAll()
+    Category.getAll()
+    .then((categories) => {
+        Product.getAll()
             .then(products => {
                     res.render('shop/index', {
                     title: 'Shopping', 
                     products: products[0],
-                    categories: categories,
+                    categories: categories[0],
                     path: '/'
                 });
             })
             .catch((error) => {
                 console.log(error);
             });
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+    
 };
 
 exports.getProducts = (req, res, next) => {
 
-    const categories = Category.getAll();
-
-    Product.getAll()
+    Category.getAll()
+    .then((categories) => {
+        Product.getAll()
             .then(products => {
                 res.render('shop/products', {
                     title: 'Products', 
                     products: products[0],
-                    categories: categories,
+                    categories: categories[0],
                     path: '/products'
                 });
             })
             .catch((error) => {
                 console.log(error);
             });
+    })
+    .catch((error) => {
+        console.log(error);
+    });
 };
 
 exports.getProductsByCategoryId = (req, res, next) => {
     const categoryId = req.params.categoryid;
-    const products = Product.getProductsByCategoryId(categoryId);
-    const categories = Category.getAll();
-    
-    res.render('shop/products', {
-        title: 'Products', 
-        products: products,
-        categories: categories,
-        selectedCategory: categoryId,
-        path: '/categories'
+    Category.getAll()
+    .then((categories)=>{
+        Product.getProductsByCategoryId(categoryId)
+        .then((products) => {
+            res.render('shop/products', {
+                title: 'Products', 
+                products: products[0],
+                categories: categories[0],
+                selectedCategory: categoryId,
+                path: '/categories'
+            });
+        })
+        .catch((error)=>{
+            console.log(error);
+        });
+        
+    })
+    .catch((error)=>{
+        console.log(error);
     });
+    
+    
 };
 
 exports.getProduct = (req, res, next) => {

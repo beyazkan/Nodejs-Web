@@ -22,7 +22,7 @@ exports.getAddProduct = (req, res, next) => {
         res.render('./admin/add-product.pug', {
             title: 'Ürün Ekle',
             path: '/admin/add-product',
-            categories: categories
+            categories: categories[0]
         });
     })
     .catch((error)=>{
@@ -51,16 +51,21 @@ exports.postAddProduct = (req, res, next) => {
 
 exports.getEditProduct = (req, res, next) => {
     const productId = req.params.productid
-    const categories = Category.getAll();
-
     Product.getById(productId)
     .then((product) => {
-        res.render('./admin/edit-product.pug', {
-            title: 'Ürün Düzenle',
-            product: product[0][0],
-            path: '/admin/edit-product',
-            categories: categories
+        Category.getAll()
+        .then((categories)=>{
+            res.render('./admin/edit-product.pug', {
+                title: 'Ürün Düzenle',
+                product: product[0][0],
+                path: '/admin/edit-product',
+                categories: categories[0]
+            });
+        })
+        .catch((error) => {
+            console.log(error);
         });
+        
     })
     .catch((error) => {
         console.log(error);
