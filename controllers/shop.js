@@ -3,7 +3,11 @@ const Category = require('../models/category.js');
 
 exports.getIndex = (req, res, next) => {
 
-    Product.findAll()
+    Product.findAll(
+        {
+            attributes: ['id','name','price','imageUrl']
+        }
+    )
     .then(products => {
         Category.findAll()
         .then(categories => {
@@ -75,17 +79,41 @@ exports.getProductsByCategoryId = (req, res, next) => {
 exports.getProduct = (req, res, next) => {
 
     const productId = req.params.productid;
-    const categories = Category.getAll();
 
-    Product.getById(productId)
+    /*Product.findByPk(productId)
     .then((product) => {
-        res.render('shop/product-detail', {
-            title:product[0][0].name,
-            product: product[0][0],
-            categories: categories,
-            path: '/products' 
+        Category.findAll()
+        .then(categories => {
+            res.render('shop/product-detail', {
+                title:product.name,
+                product: product,
+                categories: categories,
+                path: '/products' 
+            });
+        })
+        .catch(error => {
+            console.log(error);
         });
     }).catch((error) => {
+        console.log(error);
+    });*/
+
+    // Filtreleme yöntemi ile select yöntemi (liste gelir)
+    Product.findAll(
+        {
+            attributes: ['id','name','price','imageUrl', 'description'],
+            where: {id:productId}
+        }
+    )
+    .then(products => {
+        res.render('shop/product-detail', {
+            title:products[0].name,
+            product: products[0],
+            //categories: categories,
+            path: '/products' 
+        });
+    })
+    .catch(error => {
         console.log(error);
     });
 };

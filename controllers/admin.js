@@ -66,21 +66,20 @@ exports.postAddProduct = (req, res, next) => {
 
 exports.getEditProduct = (req, res, next) => {
     const productId = req.params.productid
-    Product.getById(productId)
+    Product.findByPk(productId)
     .then((product) => {
-        Category.getAll()
+        Category.findAll()
         .then((categories)=>{
             res.render('./admin/edit-product.pug', {
                 title: 'Ürün Düzenle',
-                product: product[0][0],
+                product: product,
                 path: '/admin/edit-product',
-                categories: categories[0]
+                categories: categories
             });
         })
         .catch((error) => {
             console.log(error);
         });
-        
     })
     .catch((error) => {
         console.log(error);
