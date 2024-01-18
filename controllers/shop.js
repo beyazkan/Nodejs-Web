@@ -3,20 +3,20 @@ const Category = require('../models/category.js');
 
 exports.getIndex = (req, res, next) => {
 
-    Category.getAll()
-    .then((categories) => {
-        Product.getAll()
-            .then(products => {
-                    res.render('shop/index', {
-                    title: 'Shopping', 
-                    products: products[0],
-                    categories: categories[0],
-                    path: '/'
+    Product.findAll()
+    .then(products => {
+        Category.findAll()
+        .then(categories => {
+            res.render('shop/index', {
+                title: 'Shopping', 
+                products: products,
+                categories: categories,
+                path: '/'
                 });
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+        })
+        .catch(error => {
+            console.log(error);
+        });
     })
     .catch((error) => {
         console.log(error);
@@ -26,20 +26,20 @@ exports.getIndex = (req, res, next) => {
 
 exports.getProducts = (req, res, next) => {
 
-    Category.getAll()
-    .then((categories) => {
-        Product.getAll()
-            .then(products => {
-                res.render('shop/products', {
-                    title: 'Products', 
-                    products: products[0],
-                    categories: categories[0],
-                    path: '/products'
+    Product.findAll()
+    .then(products => {
+        Category.findAll()
+        .then(categories => {
+            res.render('shop/products', {
+                title: 'Products', 
+                products: products,
+                categories: categories,
+                path: '/products'
                 });
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+        })
+        .catch(error => {
+            console.log(error);
+        });
     })
     .catch((error) => {
         console.log(error);
