@@ -17,36 +17,51 @@ exports.getProducts = (req, res, next) => {
 };
 
 exports.getAddProduct = (req, res, next) => {
-    Category.getAll()
-    .then((categories)=>{
-        res.render('./admin/add-product.pug', {
-            title: 'Ürün Ekle',
-            path: '/admin/add-product',
-            categories: categories[0]
-        });
-    })
-    .catch((error)=>{
-        console.log(error);
-    });
-    
+    res.render('./admin/add-product.pug', {
+        title: 'Ürün Ekle',
+        path: '/admin/add-product'
+    });    
 };
 
 exports.postAddProduct = (req, res, next) => {
     // Database Kayıt
-    const product = new Product();
-    product.name = req.body.name;
-    product.price = req.body.price;
-    product.imageUrl = req.body.imageUrl;
-    product.description = req.body.description;
-    product.categoryId = req.body.categoryid;
-    product.saveProduct()
-    .then(() => {
-        //res.redirect(prefix_url);
+
+    const name = req.body.name;
+    const price = req.body.price;
+    const imageUrl = req.body.imageUrl;
+    const description = req.body.description;
+    //const categoryId = req.body.categoryid;
+
+    // Product.create({
+    //     name: name,
+    //     price: price,
+    //     imageUrl: imageUrl,
+    //     description: description
+    // })
+    // .then(result => {
+    //     console.log(result);
+    //     res.redirect('/');
+    // })
+    // .catch((error) => {
+    //     console.log(error);
+    // });
+
+    const prd = Product.build({
+        name: name,
+        price: price,
+        imageUrl: imageUrl,
+        description: description
+    });
+
+    prd.save()
+    .then(result => {
+        console.log(result);
         res.redirect('/');
     })
-    .catch((error) => {
+    .catch(error => {
         console.log(error);
     });
+
 };
 
 exports.getEditProduct = (req, res, next) => {
