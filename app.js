@@ -16,6 +16,7 @@ const userRoutes = require('./routes/shop.js');
 const sequelize = require('./utility/database.js');
 const Category = require('./models/category.js');
 const Product = require('./models/product.js');
+const User = require('./models/user.js');
 
 const errorController = require('./controllers/errors.js');
 
@@ -27,17 +28,35 @@ app.use('/admin', adminRoutes);
 app.use(userRoutes);
 
 //Product.hasOne(Category);
-Product.belongsTo(Category,{
-    foreignKey: {
-        allowNull: false
-    }
-});
+Product.belongsTo(Category,{foreignKey: { allowNull: false }});
 Category.hasMany(Product);
+Product.belongsTo(User);
+User.hasMany(Product);
 
 sequelize
 .sync({force: true})
-.then(result => {
-    console.log(result);
+// .sync()
+.then(() => {
+    User.findByPk(1)
+    .then(user => {
+        if(!user){
+            User.create({name:'msoguz', email:'email@gmail.com'})
+        }
+        return user;
+    })
+    .then(user => {
+        Category.count()
+        .then(count => {
+            if(count === 0){
+                Category.bulkCreate([
+                    {name:'Telefon', description:'Telefon kategorisi'},
+                    {name:'Bilgisayar', description:'Bilgisayar kategorisi'},
+                    {name:'Elektronik', description:'Elektronik kategorisi'},
+                ]);
+            }
+        });
+    })
+    
 })
 .catch(error => {
     console.log(error);

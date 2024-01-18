@@ -17,10 +17,18 @@ exports.getProducts = (req, res, next) => {
 };
 
 exports.getAddProduct = (req, res, next) => {
-    res.render('./admin/add-product.pug', {
-        title: 'Ürün Ekle',
-        path: '/admin/add-product'
-    });    
+    Category.findAll()
+    .then((categories) =>{
+        res.render('./admin/add-product.pug', {
+            title: 'Ürün Ekle',
+            path: '/admin/add-product',
+            categories: categories
+        });   
+    })
+    .catch(error => {
+        console.log(error);
+    })
+     
 };
 
 exports.postAddProduct = (req, res, next) => {
@@ -30,38 +38,21 @@ exports.postAddProduct = (req, res, next) => {
     const price = req.body.price;
     const imageUrl = req.body.imageUrl;
     const description = req.body.description;
-    //const categoryId = req.body.categoryid;
+    const categoryId = req.body.categoryid;
 
-    // Product.create({
-    //     name: name,
-    //     price: price,
-    //     imageUrl: imageUrl,
-    //     description: description
-    // })
-    // .then(result => {
-    //     console.log(result);
-    //     res.redirect('/');
-    // })
-    // .catch((error) => {
-    //     console.log(error);
-    // });
-
-    const prd = Product.build({
+    Product.create({
         name: name,
         price: price,
         imageUrl: imageUrl,
-        description: description
-    });
-
-    prd.save()
+        description: description,
+        categoryId: categoryId
+    })
     .then(result => {
-        console.log(result);
         res.redirect('/');
     })
-    .catch(error => {
+    .catch((error) => {
         console.log(error);
     });
-
 };
 
 exports.getEditProduct = (req, res, next) => {
@@ -105,6 +96,7 @@ exports.postEditProduct = (req, res, next) => {
         product.price = price;
         product.imageUrl = imageUrl;
         product.description = description;
+        product.categoryId = categoryId;
         return product.save();
     })
     .then(result => {

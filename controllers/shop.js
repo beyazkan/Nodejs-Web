@@ -52,14 +52,19 @@ exports.getProducts = (req, res, next) => {
 
 exports.getProductsByCategoryId = (req, res, next) => {
     const categoryId = req.params.categoryid;
-    Category.getAll()
-    .then((categories)=>{
-        Product.getProductsByCategoryId(categoryId)
-        .then((products) => {
-            res.render('shop/products', {
+    const model = [];
+    Category.findAll()
+    .then(categories=>{
+        model.categories = categories;
+        const category = categories.find(i => i.id == categoryId);
+        return category.getProducts();
+    })
+    .then(products => {
+        res.render('shop/products', 
+            {
                 title: 'Products', 
-                products: products[0],
-                categories: categories[0],
+                products: products,
+                categories: model.categories,
                 selectedCategory: categoryId,
                 path: '/categories'
             });
@@ -67,13 +72,6 @@ exports.getProductsByCategoryId = (req, res, next) => {
         .catch((error)=>{
             console.log(error);
         });
-        
-    })
-    .catch((error)=>{
-        console.log(error);
-    });
-    
-    
 };
 
 exports.getProduct = (req, res, next) => {
@@ -101,17 +99,24 @@ exports.getProduct = (req, res, next) => {
     // Filtreleme yöntemi ile select yöntemi (liste gelir)
     Product.findAll(
         {
-            attributes: ['id','name','price','imageUrl', 'description'],
+            //attributes: ['id','name','price','imageUrl', 'description', 'categoryId'],
             where: {id:productId}
         }
     )
     .then(products => {
-        res.render('shop/product-detail', {
-            title:products[0].name,
-            product: products[0],
-            //categories: categories,
-            path: '/products' 
+        Category.findAll()
+        .then(categories => {
+            res.render('shop/product-detail', {
+                title:products[0].name,
+                product: products[0],
+                categories: categories,
+                path: '/products' 
+            });
+        })
+        .catch(error => {
+            console.log(error);
         });
+        
     })
     .catch(error => {
         console.log(error);
@@ -119,8 +124,6 @@ exports.getProduct = (req, res, next) => {
 };
 
 exports.getCart = (req, res, next) => {
-
-    const products = Product.getAll();
     
     res.render('shop/cart', {
         title: 'Cart', 
@@ -128,10 +131,7 @@ exports.getCart = (req, res, next) => {
     });
 };
 
-exports.getOrders = (req, res, next) => {
-
-    const products = Product.getAll();
-    
+exports.getOrders = (req, res, next) => {   
     res.render('shop/orders', {
         title: 'Orders', 
         path: '/orders'
