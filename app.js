@@ -17,6 +17,8 @@ const sequelize = require('./utility/database.js');
 const Category = require('./models/category.js');
 const Product = require('./models/product.js');
 const User = require('./models/user.js');
+const Cart = require('./models/cart.js');
+const CartItem = require('./models/cartItem.js');
 
 const errorController = require('./controllers/errors.js');
 
@@ -44,9 +46,15 @@ Category.hasMany(Product);
 Product.belongsTo(User);
 User.hasMany(Product);
 
+User.hasOne(Cart);
+Cart.belongsTo(User);
+
+Cart.belongsToMany(Product, {through: CartItem});
+Product.belongsToMany(Cart, {through: CartItem});
+
 sequelize
-.sync({force: true})
-// .sync()
+//.sync({force: true})
+.sync()
 .then(() => {
     User.findByPk(1)
     .then(user => {
