@@ -1,5 +1,6 @@
 const Product = require('../models/product.js');
 const Category = require('../models/category.js');
+const User = require('../models/user.js');
 
 exports.getProducts = (req, res, next) => {
     Product.findAll()
@@ -39,8 +40,9 @@ exports.postAddProduct = (req, res, next) => {
     const imageUrl = req.body.imageUrl;
     const description = req.body.description;
     const categoryId = req.body.categoryid;
+    const user = req.user;
 
-    Product.create({
+    user.createProduct({
         name: name,
         price: price,
         imageUrl: imageUrl,

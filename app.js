@@ -23,6 +23,17 @@ const errorController = require('./controllers/errors.js');
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use((req,res,next) =>{
+    User.findByPk(1)
+    .then(user => {
+        req.user = user;
+        next();
+    })
+    .catch(error => {
+        console.log(error);
+    });
+});
+
 // Routes
 app.use('/admin', adminRoutes);
 app.use(userRoutes);
@@ -40,7 +51,7 @@ sequelize
     User.findByPk(1)
     .then(user => {
         if(!user){
-            User.create({name:'msoguz', email:'email@gmail.com'})
+            return User.create({name:'msoguz', email:'email@gmail.com'});
         }
         return user;
     })
