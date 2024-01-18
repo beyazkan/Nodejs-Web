@@ -68,6 +68,9 @@ exports.getEditProduct = (req, res, next) => {
     const productId = req.params.productid
     Product.findByPk(productId)
     .then((product) => {
+        if(!product){
+            return res.redirect('/');
+        }
         Category.findAll()
         .then((categories)=>{
             res.render('./admin/edit-product.pug', {
@@ -88,24 +91,27 @@ exports.getEditProduct = (req, res, next) => {
 };
 
 exports.postEditProduct = (req, res, next) => {
-    // Database Kayıt
-    const product = new Product();
 
-    product.id = req.body.id;
-    product.name = req.body.name;
-    product.price = req.body.price;
-    product.imageUrl = req.body.imageUrl;
-    product.description = req.body.description;
-    product.categoryId = req.body.categoryid;
+    const id = req.body.id;
+    const name = req.body.name;
+    const price = req.body.price;
+    const imageUrl = req.body.imageUrl;
+    const description = req.body.description;
+    const categoryId = req.body.categoryid;
 
-    Product.Update(product)
-    .then(()=>{
-        //res.redirect(prefix_url);
+    Product.findByPk(id)
+    .then(product => {
+        product.name = name;
+        product.price = price;
+        product.imageUrl = imageUrl;
+        product.description = description;
+        return product.save();
+    })
+    .then(result => {
+        console.log('updated');
         res.redirect('/admin/products?action=edit')
     })
-    .catch((error)=> {
-        console.log(error);
-    });
+    .catch(error => console.log(error));
 };
 
 exports.adminIndex = (req, res, next) => {
@@ -116,8 +122,12 @@ exports.adminIndex = (req, res, next) => {
 };
 
 exports.postDeleteProduct = (req, res, next) => {
-    Product.DeleteById(req.body.productid)
-    .then(()=> {
+    const productId = req.body.productid;
+    Product.destroy({
+        where: {id:productId}
+    })
+    .then(result => {
+        console.log(result);
         res.redirect('/admin/products?action=delete');
     })
     .catch((error)=> {
