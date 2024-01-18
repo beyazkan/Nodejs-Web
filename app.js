@@ -12,6 +12,9 @@ app.set('views', './views');
 const adminRoutes = require('./routes/admin.js');
 const userRoutes = require('./routes/shop.js');
 
+// Database
+const sequelize = require('./utility/database.js');
+
 const errorController = require('./controllers/errors.js');
 
 app.use(bodyParser.urlencoded({extended:false}));
@@ -20,6 +23,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Routes
 app.use('/admin', adminRoutes);
 app.use(userRoutes);
+
+sequelize.sync()
+.then(result => {
+    console.log(result);
+})
+.catch(error => {
+    console.log(error);
+});
 
 // 404 Hatası
 app.use(errorController.get404Page);
