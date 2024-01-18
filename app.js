@@ -14,6 +14,8 @@ const userRoutes = require('./routes/shop.js');
 
 // Database
 const sequelize = require('./utility/database.js');
+const Category = require('./models/category.js');
+const Product = require('./models/product.js');
 
 const errorController = require('./controllers/errors.js');
 
@@ -24,7 +26,16 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/admin', adminRoutes);
 app.use(userRoutes);
 
-sequelize.sync()
+//Product.hasOne(Category);
+Product.belongsTo(Category,{
+    foreignKey: {
+        allowNull: false
+    }
+});
+Category.hasMany(Product);
+
+sequelize
+.sync({force: true})
 .then(result => {
     console.log(result);
 })
