@@ -52,6 +52,7 @@ Cart.belongsTo(User);
 Cart.belongsToMany(Product, {through: CartItem});
 Product.belongsToMany(Cart, {through: CartItem});
 
+let _user;
 sequelize
 //.sync({force: true})
 .sync()
@@ -64,6 +65,18 @@ sequelize
         return user;
     })
     .then(user => {
+        _user = user;
+        return user.getCart();
+
+    })
+    .then(cart => {
+        if(!cart){
+            return _user.createCart();
+        }
+
+        return cart;
+    })
+    .then(() =>{
         Category.count()
         .then(count => {
             if(count === 0){
@@ -75,7 +88,6 @@ sequelize
             }
         });
     })
-    
 })
 .catch(error => {
     console.log(error);
