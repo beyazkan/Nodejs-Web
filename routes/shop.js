@@ -8,8 +8,6 @@ router.get('/products', shopController.getProducts);
 router.get('/product/details/:productid', shopController.getProduct);
 router.get('/categories/:categoryid', shopController.getProductsByCategoryId);
 router.get('/cart', shopController.getCart);
-router.post('/cart', shopController.postCart);
-router.post('/delete-cartItem', shopController.postCartItemDelete);
 router.get('/orders', shopController.getOrders);
 
 
