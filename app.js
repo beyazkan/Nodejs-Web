@@ -19,6 +19,8 @@ const Product = require('./models/product.js');
 const User = require('./models/user.js');
 const Cart = require('./models/cart.js');
 const CartItem = require('./models/cartItem.js');
+const Order = require('./models/order.js');
+const OrderItem = require('./models/orderItem.js');
 
 const errorController = require('./controllers/errors.js');
 
@@ -51,6 +53,12 @@ Cart.belongsTo(User);
 
 Cart.belongsToMany(Product, {through: CartItem});
 Product.belongsToMany(Cart, {through: CartItem});
+
+Order.belongsTo(User);
+User.hasMany(Order);
+
+Order.belongsToMany(Product,{through: OrderItem});
+Product.belongsToMany(Order,{through: OrderItem});
 
 let _user;
 sequelize
