@@ -2,3 +2,35 @@ extends ../layouts/main-layout.pug
 
 block content
     
+    if orders.length > 0
+        each order in orders 
+            .card.mb-5 
+                .card-header 
+                    h3 Sipariş Numarası: ##{order.id}
+                table.table 
+                    thead 
+                        tr 
+                            th Resim 
+                            th Ürün Adı 
+                            th Fiyatı 
+                            th Adedi 
+                    tbody 
+                        each product in order.products 
+                            tr 
+                                td
+                                    img(src=`/img/${product.imageUrl}` width="80")
+                                td #{product.name}
+                                td #{product.orderItem.quantity}
+                                td #{product.orderItem.price}
+                    tfoot 
+                        tr 
+                            td(colspan="2") #{order.createdAt.toDateString()}
+                            td 
+                                - var totalPrice = 0;
+                                each product in order.products 
+                                    - totalPrice += (product.price * product.orderItem.quantity)
+                                td #{totalPrice} TL
+
+
+    else
+        h1 Herhangi bir sipariş bulunmuyor.
