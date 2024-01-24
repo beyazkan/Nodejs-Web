@@ -53,29 +53,18 @@ exports.postAddProduct = (req, res, next) => {
 };
 
 exports.getEditProduct = (req, res, next) => {
-    const productId = req.params.productid
-    Product.findByPk(productId)
-    .then((product) => {
-        if(!product){
-            return res.redirect('/');
-        }
-        Category.findAll()
-        .then((categories)=>{
-            res.render('./admin/edit-product.pug', {
-                title: 'Ürün Düzenle',
-                product: product,
-                path: '/admin/edit-product',
-                categories: categories
-            });
-        })
-        .catch((error) => {
-            console.log(error);
-        });
+    Product.findById(req.params.productid)
+    .then(product => {
+        console.log(product);
+        res.render('./admin/edit-product.pug', {
+            title: 'Ürün Düzenle',
+            product: product,
+            path: '/admin/edit-product'
+        });    
     })
-    .catch((error) => {
+    .catch(error => {
         console.log(error);
-    });
-    
+    });    
 };
 
 exports.postEditProduct = (req, res, next) => {
