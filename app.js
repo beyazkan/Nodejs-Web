@@ -9,7 +9,7 @@ app.set('view engine', 'pug');
 app.set('views', './views');
 
 // Import Routes Modules
-// const adminRoutes = require('./routes/admin.js');
+const adminRoutes = require('./routes/admin.js');
 // const userRoutes = require('./routes/shop.js');
 
 // Database
@@ -23,7 +23,7 @@ app.set('views', './views');
 // const OrderItem = require('./models/orderItem.js');
 
 const errorController = require('./controllers/errors.js');
-const mongoConnect = require('./utility/database.js');
+const mongoConnect = require('./utility/database.js').mongoConnect;
 
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(express.static(path.join(__dirname, 'public')));
@@ -40,7 +40,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // });
 
 // Routes
-// app.use('/admin', adminRoutes);
+app.use('/admin', adminRoutes);
 // app.use(userRoutes);
 
 //Product.hasOne(Category);
@@ -105,9 +105,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 // 404 Hatası
 app.use(errorController.get404Page);
 
-mongoConnect((client) => {
+mongoConnect(() => {
     app.listen(3000);
-    console.log(client);
 });
 
 // app.listen(3000, () => {

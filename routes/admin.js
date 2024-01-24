@@ -11,12 +11,12 @@ router.get('/add-product', adminController.getAddProduct);
 //admin/add-product=> POST
 router.post('/add-product', adminController.postAddProduct);
 //admin/edit-product=> GET
-router.get('/edit-product/:productid', adminController.getEditProduct);
+// router.get('/edit-product/:productid', adminController.getEditProduct);
 //admin/edit-product=> POST
-router.post('/edit-product', adminController.postEditProduct);
+// router.post('/edit-product', adminController.postEditProduct);
 
-router.get('/products', adminController.getProducts)
-router.post('/delete-product', adminController.postDeleteProduct);
-router.get('/', adminController.adminIndex);
+// router.get('/products', adminController.getProducts)
+// router.post('/delete-product', adminController.postDeleteProduct);
+// router.get('/', adminController.adminIndex);
 
 module.exports = router;
