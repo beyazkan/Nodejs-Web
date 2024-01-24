@@ -11,13 +11,22 @@ class Product{
     save() {
         const db = getDB();
 
-        db.collection('products').insertOne(this)
+        return db.collection('products').insertOne(this)
         .then(result => {
             console.log(result)
         })
         .catch(error => {
             console.log(error);
         })
+    }
+
+    static findAll(){
+        const db = getDB();
+        return db.collection('products').find({}).toArray()
+        .then(products => {
+            return products;
+        })
+        .catch(error => { console.log(error) });
     }
 }
 
