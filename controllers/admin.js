@@ -45,7 +45,7 @@ exports.postAddProduct = (req, res, next) => {
     const product = new Product(name, price, description, imageUrl);
     product.save()
     .then(result => {
-        res.redirect('/admin/add-product');
+        res.redirect('/admin/products');
     })
     .catch((error) => {
         console.log(error);
@@ -74,19 +74,12 @@ exports.postEditProduct = (req, res, next) => {
     const price = req.body.price;
     const imageUrl = req.body.imageUrl;
     const description = req.body.description;
-    const categoryId = req.body.categoryid;
+    // const categoryId = req.body.categoryid;
 
-    Product.findByPk(id)
-    .then(product => {
-        product.name = name;
-        product.price = price;
-        product.imageUrl = imageUrl;
-        product.description = description;
-        product.categoryId = categoryId;
-        return product.save();
-    })
+    const product = new Product(name, price, description, imageUrl,id);
+
+    product.save()
     .then(result => {
-        console.log('updated');
         res.redirect('/admin/products?action=edit')
     })
     .catch(error => console.log(error));
