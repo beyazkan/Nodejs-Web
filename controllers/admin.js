@@ -94,11 +94,9 @@ exports.adminIndex = (req, res, next) => {
 
 exports.postDeleteProduct = (req, res, next) => {
     const productId = req.body.productid;
-    Product.destroy({
-        where: {id:productId}
-    })
-    .then(result => {
-        console.log(result);
+    Product.deleteById(productId)
+    .then(() => {
+        console.log('Product has been deleted.');
         res.redirect('/admin/products?action=delete');
     })
     .catch((error)=> {
