@@ -32,17 +32,8 @@ exports.postAddProduct = (req, res, next) => {
     const price = req.body.price;
     const imageUrl = req.body.imageUrl;
     const description = req.body.description;
-    //const categoryId = req.body.categoryid;
-    //const user = req.user;
-
-    // user.createProduct({
-    //     name: name,
-    //     price: price,
-    //     imageUrl: imageUrl,
-    //     description: description,
-    //     categoryId: categoryId
-    // })
-    const product = new Product(name, price, description, imageUrl);
+    
+    const product = new Product(name, price, description, imageUrl, null, req.user._id);
     product.save()
     .then(result => {
         res.redirect('/admin/products');
@@ -76,7 +67,7 @@ exports.postEditProduct = (req, res, next) => {
     const description = req.body.description;
     // const categoryId = req.body.categoryid;
 
-    const product = new Product(name, price, description, imageUrl,id);
+    const product = new Product(name, price, description, imageUrl,id, req.user._id);
 
     product.save()
     .then(result => {
