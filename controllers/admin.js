@@ -1,5 +1,5 @@
 const Product = require('../models/product.js');
-// const Category = require('../models/category.js');
+const Category = require('../models/category.js');
 // const User = require('../models/user.js');
 
 exports.getProducts = (req, res, next) => {
@@ -94,4 +94,58 @@ exports.postDeleteProduct = (req, res, next) => {
         console.log(error);
     });
     
+};
+
+// Category
+exports.getAddCategory = (req, res, next) => {
+    res.render('./admin/add-category.pug', {
+        title: 'Kategori Ekle',
+        path: '/admin/add-category'
+        //categories: categories
+    });      
+};
+
+exports.postAddCategory = (req, res, next) => {
+    const name = req.body.name;
+    const description = req.body.description;
+
+    const category = new Category(name, description);
+
+    category.save()
+    .then(result => {
+        //console.log(result);
+        res.redirect('/admin/categories?action=create');
+    })
+    .catch(error => {
+        console.log(error);
+    })
+};
+
+exports.getCategories = (req, res, next) => {
+    Category.findAll()
+    .then(categories => {
+        res.render('./admin/categories.pug', {
+            title: 'Kategoriler',
+            path: '/admin/categories',
+            categories: categories,
+            action: req.query.action
+        });      
+    })
+    .catch(error => { console.log(error) })
+};
+
+exports.getEditCategory = (req, res, next) => {
+    res.render('./admin/add-product.pug', {
+        title: 'Ürün Ekle',
+        path: '/admin/add-product'
+        //categories: categories
+    });      
+};
+
+exports.postEditCategory = (req, res, next) => {
+    res.render('./admin/add-product.pug', {
+        title: 'Ürün Ekle',
+        path: '/admin/add-product'
+        //categories: categories
+    });      
 };

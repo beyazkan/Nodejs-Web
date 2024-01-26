@@ -21,6 +21,11 @@ router.get('/products', adminController.getProducts);
 
 router.post('/delete-product', adminController.postDeleteProduct);
 
+// Kategori Sayfaları
+router.get('/add-category', adminController.getAddCategory);
+router.post('/add-category', adminController.postAddCategory);
+router.get('/categories', adminController.getCategories);
+
 router.get('/', adminController.adminIndex);
 
 module.exports = router;
