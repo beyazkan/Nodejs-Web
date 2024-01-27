@@ -137,9 +137,9 @@ exports.getCategories = (req, res, next) => {
 exports.getEditCategory = (req, res, next) => {
     Category.findById(req.params.categoryid)
     .then(category => {
-        res.render('./admin/add-category.pug', {
+        res.render('./admin/edit-category.pug', {
             title: 'Kategori Düzenle',
-            path: '/admin/categories',
+            path: '/admin/add-category',
             category: category
         });      
     })
@@ -149,9 +149,19 @@ exports.getEditCategory = (req, res, next) => {
 };
 
 exports.postEditCategory = (req, res, next) => {
-    res.render('./admin/add-product.pug', {
-        title: 'Ürün Ekle',
-        path: '/admin/add-product'
-        //categories: categories
-    });      
+    const id = req.body.id;
+    const name = req.body.name;
+    const description = req.body.description;
+    
+
+    const category = new Category(name, description, id);
+
+    category.save()
+    .then(result => {
+        //console.log(result);
+        res.redirect('/admin/categories?action=edit');
+    })
+    .catch(error => {
+        console.log(error);
+    })
 };

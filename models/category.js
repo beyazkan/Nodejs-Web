@@ -9,7 +9,8 @@ class Category{
     }
 
     save(){
-        const db = getDB();
+        let db = getDB();
+        
         if(this._id){
             db = db.collection('categories').updateOne({_id: this._id}, { $set: this });
         }else{

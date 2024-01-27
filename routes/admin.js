@@ -24,7 +24,7 @@ router.post('/delete-product', adminController.postDeleteProduct);
 // Kategori Sayfaları
 router.get('/add-category', adminController.getAddCategory);
 router.post('/add-category', adminController.postAddCategory);
-router.get('/categories/categoryid', adminController.getEditCategory);
+router.get('/edit-category/:categoryid', adminController.getEditCategory);
 router.post('/edit-category', adminController.postEditCategory);
 router.get('/categories', adminController.getCategories);
 

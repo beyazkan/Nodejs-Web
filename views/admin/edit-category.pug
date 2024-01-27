@@ -13,7 +13,7 @@ block content
         .form-group.row
             label(for="description").col-sm-2.col-form-label Description
             .col-sm-10
-                textarea#description(name="description" cols="30" rows="10" value=`${category.description}`).form-control
+                textarea#description(name="description" cols="30" rows="10").form-control #{category.description}
         
         .form-group.row
             .col-sm-10.offset-sm-2
