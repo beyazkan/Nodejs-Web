@@ -46,12 +46,19 @@ exports.postAddProduct = (req, res, next) => {
 exports.getEditProduct = (req, res, next) => {
     Product.findById(req.params.productid)
     .then(product => {
-        console.log(product);
-        res.render('./admin/edit-product.pug', {
-            title: 'Ürün Düzenle',
-            product: product,
-            path: '/admin/edit-product'
-        });    
+        
+        Category.findAll()
+        .then(categories => {
+            res.render('./admin/edit-product.pug', {
+                title: 'Ürün Düzenle',
+                product: product,
+                path: '/admin/edit-product',
+                categories: categories
+            });    
+        })
+        .catch(error => {
+            console.log(error);
+        })
     })
     .catch(error => {
         console.log(error);
@@ -65,9 +72,9 @@ exports.postEditProduct = (req, res, next) => {
     const price = req.body.price;
     const imageUrl = req.body.imageUrl;
     const description = req.body.description;
-    // const categoryId = req.body.categoryid;
+    const categories = req.body.categoryids;
 
-    const product = new Product(name, price, description, imageUrl,id, req.user._id);
+    const product = new Product(name, price, description, imageUrl, categories, id, req.user._id);
 
     product.save()
     .then(result => {
