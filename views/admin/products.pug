@@ -1,8 +1,10 @@
 extends ../layouts/main-layout.pug
 
 block content
+    if(action !== 'undefined' && action === 'create')
+        div.alert.alert-success Ürün başarıyla eklendi.
     if(action !== 'undefined' && action === 'edit')
-        div.alert.alert-success Ürün başarıyla güncellendi.
+        div.alert.alert-warning Ürün başarıyla güncellendi.
     if(action !== 'undefined' && action === 'delete')
         div.alert.alert-danger Ürün başarıyla silindi.
 

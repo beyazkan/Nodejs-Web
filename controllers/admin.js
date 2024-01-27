@@ -36,7 +36,7 @@ exports.postAddProduct = (req, res, next) => {
     const product = new Product(name, price, description, imageUrl, null, req.user._id);
     product.save()
     .then(result => {
-        res.redirect('/admin/products');
+        res.redirect('/admin/products?action=create');
     })
     .catch((error) => {
         console.log(error);
@@ -135,11 +135,17 @@ exports.getCategories = (req, res, next) => {
 };
 
 exports.getEditCategory = (req, res, next) => {
-    res.render('./admin/add-product.pug', {
-        title: 'Ürün Ekle',
-        path: '/admin/add-product'
-        //categories: categories
-    });      
+    Category.findById(req.params.categoryid)
+    .then(category => {
+        res.render('./admin/add-category.pug', {
+            title: 'Kategori Düzenle',
+            path: '/admin/categories',
+            category: category
+        });      
+    })
+    .catch(error => {
+        console.log(error);
+    })
 };
 
 exports.postEditCategory = (req, res, next) => {
