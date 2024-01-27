@@ -7,7 +7,7 @@ class Product{
         this.price = price;
         this.description = description;
         this.imageUrl = imageUrl;
-        this.categories = categories;
+        this.categories = (categories && !Array.isArray(categories)) ? Array.of(categories): categories;
         this._id = id ? new mongodb.ObjectId(id) : null;
         this.userId = userId;
     }
