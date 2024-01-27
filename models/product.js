@@ -16,16 +16,21 @@ class Product{
         let db = getDB();
 
         if(this._id){
+            console.log("Güncellendi.");
+            console.log(this._id);
             db = db.collection('products').updateOne({_id: this._id}, { $set: this});
         }else{
+            console.log("Eklendi.");
             db = db.collection('products').insertOne(this);
         }
 
         return db
         .then(result => {
+            console.log("Başarılı");
             console.log(result)
         })
         .catch(error => {
+            console.log("Hatalı");
             console.log(error);
         })
     }
@@ -70,6 +75,15 @@ class Product{
         .catch(error => {
             console.log(error);
         })
+    }
+
+    static findByCategoryId(categoryid){
+        const db = getDB();
+        return db.collection('products').find({ categories: categoryid}).toArray()
+        .then(products => {
+            return products
+        })
+        .catch(error => { console.log(error); })
     }
 }
 

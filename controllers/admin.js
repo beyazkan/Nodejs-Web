@@ -18,11 +18,18 @@ exports.getProducts = (req, res, next) => {
 };
 
 exports.getAddProduct = (req, res, next) => {
-    res.render('./admin/add-product.pug', {
-        title: 'Ürün Ekle',
-        path: '/admin/add-product'
-        //categories: categories
-    });        
+    Category.findAll()
+    .then(categories => {
+        res.render('./admin/add-product.pug', {
+            title: 'Ürün Ekle',
+            path: '/admin/add-product',
+            categories: categories
+        });        
+    })
+    .catch(error => {
+        console.log(error);
+    })
+   
 };
 
 exports.postAddProduct = (req, res, next) => {
@@ -32,8 +39,9 @@ exports.postAddProduct = (req, res, next) => {
     const price = req.body.price;
     const imageUrl = req.body.imageUrl;
     const description = req.body.description;
+    const categories = req.body.categoryids;
     
-    const product = new Product(name, price, description, imageUrl, null, req.user._id);
+    const product = new Product(name, price, description, imageUrl, categories, null, req.user._id);
     product.save()
     .then(result => {
         res.redirect('/admin/products?action=create');
