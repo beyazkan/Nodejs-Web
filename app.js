@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const path = require('path');
+const mongoose = require('mongoose');
 
 const bodyParser = require('body-parser');
 
@@ -13,13 +14,14 @@ const adminRoutes = require('./routes/admin.js');
 const userRoutes = require('./routes/shop.js');
 
 const errorController = require('./controllers/errors.js');
-const mongoConnect = require('./utility/database.js').mongoConnect;
+//const mongoConnect = require('./utility/database.js').mongoConnect;
 
 const User = require('./models/user.js');
 
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(express.static(path.join(__dirname, 'public')));
 
+/*
 app.use((req,res,next) => {
     User.findByUserName('msoguz')
     .then(user => {
@@ -29,6 +31,7 @@ app.use((req,res,next) => {
     })
     .catch(error => { console.log(error) })
 })
+*/
 
 // Routes
 app.use('/admin', adminRoutes);
@@ -37,6 +40,7 @@ app.use(userRoutes);
 // 404 Hatası
 app.use(errorController.get404Page);
 
+/*
 mongoConnect(() => {
     User.findByUserName('msoguz')
     .then(user => {
@@ -56,3 +60,11 @@ mongoConnect(() => {
 
     
 });
+*/
+
+mongoose.connect('mongodb://127.0.0.1/node-app')
+    .then(() => {
+        console.log('Connected to mongodb');
+        app.listen(3000);
+    })
+    .catch(error => console.log(error))
