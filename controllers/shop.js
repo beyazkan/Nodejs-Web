@@ -148,7 +148,7 @@ exports.postOrder = (req, res, next) => {
     req.user
         .addOrder()
         .then(() => {
-            res.redirect('/cart');
+            res.redirect('/orders');
         })
         .catch(error => console.log(error));
 };
