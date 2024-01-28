@@ -54,6 +54,50 @@ class User{
 
         return db.collection('users').updateOne({_id: new mongodb.ObjectId(this._id)}, { $set: { cart: {items: cartItems}}});
     }
+
+    addOrder(){
+        // Get Cart
+
+        // Create Order Object
+
+        // Save Order
+
+        // Update Cart
+
+        const db = getDB();
+        return this.getCart()
+            .then(products => {
+                const order = {
+                    items: products.map(item => {
+                        return {
+                            _id: item._id,
+                            name: item.name,
+                            price: item.price,
+                            imageUrl: item.imageUrl,
+                            userId: item.userId,
+                            quantity: item.quantity
+                        }
+                    }),
+                    user: {
+                        _id: new mongodb.ObjectId(this._id),
+                        name: this.name,
+                        email: this.email
+                    },
+                    date: new Date().toLocaleString()
+                }
+
+                return db.collection('orders').insertOne(order);
+            })
+            .then(() => {
+                this.cart = {items: []};
+                return db.collection('users')
+                    .updateOne({_id: new mongodb.ObjectId(this._id)}, {$set: {cart: { items: []}}});
+            })
+    }
+
+    getOrders(){
+
+    }
     
 
     addToCart(product){
