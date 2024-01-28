@@ -45,6 +45,17 @@ class User{
         })
     }
 
+    deleteCartItem(productid){
+        const cartItems = this.cart.items.filter(item => {
+            return item.productId.toString() !== productid.toString();
+        });
+
+        const db = getDB();
+
+        return db.collection('users').updateOne({_id: new mongodb.ObjectId(this._id)}, { $set: { cart: {items: cartItems}}});
+    }
+    
+
     addToCart(product){
         const index = this.cart.items.findIndex(cp => {
             return cp.productId.toString() === product._id.toString();
