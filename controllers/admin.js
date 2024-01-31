@@ -115,7 +115,7 @@ exports.adminIndex = (req, res, next) => {
 
 exports.postDeleteProduct = (req, res, next) => {
     const productId = req.body.productid;
-    Product.deleteById(productId)
+    Product.deleteOne({_id: productId})
     .then(() => {
         console.log('Product has been deleted.');
         res.redirect('/admin/products?action=delete');
