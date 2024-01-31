@@ -23,7 +23,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 app.use((req,res,next) => {
-    User.findByUserName('msoguz')
+    User.findOne({name: 'msoguz'})
     .then(user => {
         req.user = user;
         console.log(req.user);
