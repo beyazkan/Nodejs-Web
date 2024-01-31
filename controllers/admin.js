@@ -1,5 +1,5 @@
 const Product = require('../models/product.js');
-const Category = require('../models/category.js');
+// const Category = require('../models/category.js');
 // const User = require('../models/user.js');
 
 exports.getProducts = (req, res, next) => {
@@ -18,18 +18,10 @@ exports.getProducts = (req, res, next) => {
 };
 
 exports.getAddProduct = (req, res, next) => {
-    Category.findAll()
-    .then(categories => {
-        res.render('./admin/add-product.pug', {
-            title: 'Ürün Ekle',
-            path: '/admin/add-product',
-            categories: categories
-        });        
-    })
-    .catch(error => {
-        console.log(error);
-    })
-   
+    res.render('./admin/add-product.pug', {
+        title: 'Ürün Ekle',
+        path: '/admin/add-product'
+    });
 };
 
 exports.postAddProduct = (req, res, next) => {
@@ -41,7 +33,12 @@ exports.postAddProduct = (req, res, next) => {
     const description = req.body.description;
     const categories = req.body.categoryids;
     
-    const product = new Product(name, price, description, imageUrl, categories, null, req.user._id);
+    const product = new Product({
+        name: name,
+        price: price,
+        imageUrl: imageUrl,
+        description: description
+    });
     product.save()
     .then(result => {
         res.redirect('/admin/products?action=create');
