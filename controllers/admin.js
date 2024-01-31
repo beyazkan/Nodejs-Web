@@ -3,7 +3,12 @@ const Product = require('../models/product.js');
 // const User = require('../models/user.js');
 
 exports.getProducts = (req, res, next) => {
-    Product.findAll()
+    Product
+            .find()
+            // .find({name: 'Iphone 6', price: 12000})
+            // .limit(10)
+            // .sort({name: -1})
+            // .select({name: 1, price: 1})
             .then(products => {
                 res.render('./admin/products.pug',{
                     title: 'Admin Product List',

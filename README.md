@@ -5,5 +5,6 @@ Dersle alakalı notları aldığım yer.
 - ExpressJS
 - Sequlizer
 - MongoDB
+- Mongoose
 
 Web Sayfam:[msoguz.com](https://www.msoguz.com)
