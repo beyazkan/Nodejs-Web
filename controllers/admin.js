@@ -56,30 +56,11 @@ exports.postAddProduct = (req, res, next) => {
 exports.getEditProduct = (req, res, next) => {
     Product.findById(req.params.productid)
     .then(product => {
-        
-        Category.findAll()
-        .then(categories => {
-            categories = categories.map(category => {
-
-                if(product.categories){
-                    product.categories.find(item => {
-                        if(item == category._id){
-                            category.selected = true;
-                        }
-                    })
-                }
-                return category;
-            })
-            res.render('./admin/edit-product.pug', {
-                title: 'Ürün Düzenle',
-                product: product,
-                path: '/admin/edit-product',
-                categories: categories
-            });    
-        })
-        .catch(error => {
-            console.log(error);
-        })
+        res.render('./admin/edit-product.pug', {
+            title: 'Ürün Düzenle',
+            product: product,
+            path: '/admin/edit-product'
+        });    
     })
     .catch(error => {
         console.log(error);
@@ -88,20 +69,41 @@ exports.getEditProduct = (req, res, next) => {
 
 exports.postEditProduct = (req, res, next) => {
 
+    // query first
+    // update first
+
     const id = req.body.id;
     const name = req.body.name;
     const price = req.body.price;
     const imageUrl = req.body.imageUrl;
     const description = req.body.description;
-    const categories = req.body.categoryids;
 
-    const product = new Product(name, price, description, imageUrl, categories, id, req.user._id);
-
-    product.save()
-    .then(result => {
+    Product.updateOne({_id: id}, {
+        $set:{
+            name: name,
+            price: price,
+            imageUrl: imageUrl,
+            description: description
+        }
+    })
+    .then(() => {
         res.redirect('/admin/products?action=edit')
     })
     .catch(error => console.log(error));
+
+    // Product.findById(id)
+    // .then(product => {
+    //     product.name = name;
+    //     product.price = price;
+    //     product.imageUrl = imageUrl;
+    //     product.description = description;
+
+    //     return product.save();
+    // })
+    // .then(() => {
+    //     res.redirect('/admin/products?action=edit')
+    // })
+    // .catch(error => console.log(error));
 };
 
 exports.adminIndex = (req, res, next) => {
