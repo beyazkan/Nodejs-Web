@@ -1,20 +1,16 @@
-const Category = require('../models/category.js');
+//const Category = require('../models/category.js');
 const Product = require('../models/product.js');
 
 exports.getIndex = (req, res, next) => {
 
-    Product.findAll()
+    Product.find()
     .then(products => {
-        Category.findAll()
-        .then(categories => {
-            res.render('shop/index', {
-                title: 'Shopping', 
-                products: products,
-                path: '/',
-                categories: categories
-                });
-        })
-        .catch(error => { console.log(error); })
+       
+        res.render('shop/index', {
+            title: 'Shopping', 
+            products: products,
+            path: '/'
+        });
     })
     .catch(error => {
         console.log();
@@ -24,18 +20,13 @@ exports.getIndex = (req, res, next) => {
 
 exports.getProducts = (req, res, next) => {
 
-    Product.findAll()
+    Product.find()
     .then(products => {
-        Category.findAll()
-        .then(categories => {
-            res.render('shop/products', {
-                title: 'Products', 
-                products: products,
-                path: '/products',
-                categories: categories
-                });
-        })
-        .catch(error => { console.log(error); })  
+        res.render('shop/products', {
+            title: 'Products', 
+            products: products,
+            path: '/products'
+        });
     })
     .catch(error => {
         console.log();
@@ -69,7 +60,9 @@ exports.getProduct = (req, res, next) => {
 
     const productId = req.params.productid;
 
-    Product.findById(req.params.productid)
+    Product
+    // .findById(req.params.productid)
+    .findOne({_id: req.params.productid})
     .then(product => {
         res.render('shop/product-detail', {
             title:product.name,
