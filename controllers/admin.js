@@ -5,11 +5,10 @@ const Product = require('../models/product.js');
 exports.getProducts = (req, res, next) => {
     Product
             .find()
-            // .find({name: 'Iphone 6', price: 12000})
-            // .limit(10)
-            // .sort({name: -1})
-            // .select({name: 1, price: 1})
+            .populate('userId', 'name -_id')
+            .select('name price imageUrl userId')
             .then(products => {
+                console.log(products);
                 res.render('./admin/products.pug',{
                     title: 'Admin Product List',
                     products: products,
