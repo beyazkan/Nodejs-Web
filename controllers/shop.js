@@ -44,10 +44,12 @@ exports.getProducts = (req, res, next) => {
 exports.getProductsByCategoryId = (req, res, next) => {
     const categoryId = req.params.categoryid;
     const model = [];
-    Category.findAll()
+    Category.find()
     .then(categories=>{
         model.categories = categories;
-        return Product.findByCategoryId(categoryId);
+        return Product.find({
+            categories: categoryId
+        });
     })
     .then(products => {
         res.render('shop/products', 
@@ -87,12 +89,14 @@ exports.getProduct = (req, res, next) => {
 
 exports.getCart = (req, res, next) => {
 
-    req.user.getCart()
-    .then(products => {
+    req.user
+    .populate('cart.items.productId')
+    .then(user => {
+        console.log(user.cart.items);
             res.render('shop/cart', {
                 title: 'Cart', 
                 path: '/cart',
-                products: products
+                products: user.cart.items
         })
     })
     .catch(error => {
