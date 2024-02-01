@@ -23,10 +23,16 @@ exports.getProducts = (req, res, next) => {
 };
 
 exports.getAddProduct = (req, res, next) => {
-    res.render('./admin/add-product.pug', {
-        title: 'Ürün Ekle',
-        path: '/admin/add-product'
-    });
+    Category.find()
+    .then(categories => {
+        res.render('./admin/add-product.pug', {
+            title: 'Ürün Ekle',
+            path: '/admin/add-product',
+            categories: categories
+        });
+    })
+    .catch(error => console.log(error))
+    
 };
 
 exports.postAddProduct = (req, res, next) => {
@@ -43,7 +49,8 @@ exports.postAddProduct = (req, res, next) => {
         price: price,
         imageUrl: imageUrl,
         description: description,
-        userId: req.user
+        userId: req.user,
+        categories: categories
     });
     product.save()
     .then(result => {
@@ -57,11 +64,29 @@ exports.postAddProduct = (req, res, next) => {
 exports.getEditProduct = (req, res, next) => {
     Product.findById(req.params.productid)
     .then(product => {
-        res.render('./admin/edit-product.pug', {
-            title: 'Ürün Düzenle',
-            product: product,
-            path: '/admin/edit-product'
-        });    
+        Category.find()
+        .then(categories => {
+            
+            categories = categories.map(category => {
+                if(product.categories){
+                    product.categories.find(item => {
+                        if(item.toString() === category._id.toString()){
+                            category.selected = true;
+                        }
+                    })
+                }
+
+                return category;
+            })
+
+            res.render('./admin/edit-product.pug', {
+                title: 'Ürün Düzenle',
+                path: '/admin/edit-product',
+                product: product,
+                categories: categories                
+            });    
+        })
+        .catch(error => console.log(error))
     })
     .catch(error => {
         console.log(error);
@@ -78,33 +103,21 @@ exports.postEditProduct = (req, res, next) => {
     const price = req.body.price;
     const imageUrl = req.body.imageUrl;
     const description = req.body.description;
+    const categoryIds = req.body.categoryids;
 
     Product.updateOne({_id: id}, {
         $set:{
             name: name,
             price: price,
             imageUrl: imageUrl,
-            description: description
+            description: description,
+            categories: categoryIds
         }
     })
     .then(() => {
         res.redirect('/admin/products?action=edit')
     })
     .catch(error => console.log(error));
-
-    // Product.findById(id)
-    // .then(product => {
-    //     product.name = name;
-    //     product.price = price;
-    //     product.imageUrl = imageUrl;
-    //     product.description = description;
-
-    //     return product.save();
-    // })
-    // .then(() => {
-    //     res.redirect('/admin/products?action=edit')
-    // })
-    // .catch(error => console.log(error));
 };
 
 exports.adminIndex = (req, res, next) => {
