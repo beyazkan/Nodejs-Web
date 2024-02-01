@@ -1,16 +1,20 @@
-//const Category = require('../models/category.js');
+const Category = require('../models/category.js');
 const Product = require('../models/product.js');
 
 exports.getIndex = (req, res, next) => {
 
     Product.find()
     .then(products => {
-       
-        res.render('shop/index', {
-            title: 'Shopping', 
-            products: products,
-            path: '/'
-        });
+       Category.find()
+       .then(categories => {
+            res.render('shop/index', {
+                title: 'Shopping', 
+                products: products,
+                categories: categories,
+                path: '/'
+            });
+       })
+       .catch(error => console.log(error))
     })
     .catch(error => {
         console.log();
@@ -19,44 +23,18 @@ exports.getIndex = (req, res, next) => {
 };
 
 exports.getProducts = (req, res, next) => {
-
-    // eq (equal)
-    // ne (not equal)
-    // gt (greater than)
-    // gte (greater than or equal)
-    // lt (less than)
-    // lte (less than or equal)
-    // in
-    // nin (not in)
-    
     Product
     .find()
-    // .find({price: {$eq: 2000}})
-    // .find({price: {$ne: 2000}})
-    // .find({price: {$gt: 2000}})
-    // .find({price: {$gte: 2000}})
-    // .find({price: {$lt: 2000}})
-    // .find({price: {$lte: 2000}})
-    // .find({price: {$in: [2000, 1000, 3000]} })
-    // .find({price: {$nin: 2000}})
-    // .find({ price: { $gte: 1000, $lte: 2000}})
-    // .find()
-    // .or([{price: {$gt: 2000}, name: 'Samsung S6'}])
-    // .and()
-
-    // Samsung ifadesinin aranması
-    // starts with
-    // .find({name:  /^Samsung/})
-    // end with
-    // .find({ name: /Samsung$/})
-    // contains
-    // .find({name: /.*Samsung.*/})
     .then(products => {
-        res.render('shop/products', {
-            title: 'Products', 
-            products: products,
-            path: '/products'
-        });
+        Category.find()
+        .then(categories => {
+            res.render('shop/products', {
+                title: 'Products', 
+                products: products,
+                categories: categories,
+                path: '/products'
+            });
+        })
     })
     .catch(error => {
         console.log();

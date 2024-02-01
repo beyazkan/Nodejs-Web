@@ -26,6 +26,7 @@ router.get('/add-category', adminController.getAddCategory);
 router.post('/add-category', adminController.postAddCategory);
 router.get('/edit-category/:categoryid', adminController.getEditCategory);
 router.post('/edit-category', adminController.postEditCategory);
+router.post('/delete-category', adminController.postDeleteCategory);
 router.get('/categories', adminController.getCategories);
 
 router.get('/', adminController.adminIndex);

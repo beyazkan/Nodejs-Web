@@ -1,5 +1,6 @@
 const Product = require('../models/product.js');
-// const Category = require('../models/category.js');
+const Category = require('../models/category.js');
+const category = require('../models/category.js');
 // const User = require('../models/user.js');
 
 exports.getProducts = (req, res, next) => {
@@ -139,11 +140,13 @@ exports.postAddCategory = (req, res, next) => {
     const name = req.body.name;
     const description = req.body.description;
 
-    const category = new Category(name, description);
+    const category = new Category({
+        name: name,
+        description: description
+    });
 
     category.save()
     .then(result => {
-        //console.log(result);
         res.redirect('/admin/categories?action=create');
     })
     .catch(error => {
@@ -152,7 +155,7 @@ exports.postAddCategory = (req, res, next) => {
 };
 
 exports.getCategories = (req, res, next) => {
-    Category.findAll()
+    Category.find()
     .then(categories => {
         res.render('./admin/categories.pug', {
             title: 'Kategoriler',
@@ -182,11 +185,13 @@ exports.postEditCategory = (req, res, next) => {
     const id = req.body.id;
     const name = req.body.name;
     const description = req.body.description;
-    
 
-    const category = new Category(name, description, id);
-
-    category.save()
+    Category.findById(id)
+    .then(category => {
+        category.name = name;
+        category.description = description;
+        return category.save();
+    })
     .then(result => {
         //console.log(result);
         res.redirect('/admin/categories?action=edit');
@@ -194,4 +199,17 @@ exports.postEditCategory = (req, res, next) => {
     .catch(error => {
         console.log(error);
     })
+};
+
+exports.postDeleteCategory = (req, res, next) => {
+    const categoryId = req.body.categoryid;
+    Category.deleteOne({_id: categoryId})
+    .then(() => {
+        console.log('Category has been deleted.');
+        res.redirect('/admin/categories?action=delete');
+    })
+    .catch((error)=> {
+        console.log(error);
+    });
+    
 };
