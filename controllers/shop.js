@@ -1,5 +1,6 @@
 const Category = require('../models/category.js');
 const Product = require('../models/product.js');
+const Order = require('../models/order.js');
 
 exports.getIndex = (req, res, next) => {
 
@@ -151,9 +152,33 @@ exports.getOrders = (req, res, next) => {
 
 exports.postOrder = (req, res, next) => {
     req.user
-        .addOrder()
-        .then(() => {
-            res.redirect('/orders');
-        })
-        .catch(error => console.log(error));
+    .populate('cart.items.productId')
+    .then(user => {
+        const order = new Order({
+            user:{
+                userId: req.user._id,
+                name: req.user.name,
+                email: req.user.email
+            },
+            items: user.cart.items.map(p => {
+                    return {
+                        product:{
+                            _id: p.productId._id,
+                            name: p.productId.name,
+                            price: p.productId.price,
+                            imageUrl: p.productId.imageUrl
+                        },
+                        quantity: p.quantity
+                    };
+                })
+        });
+        return order.save();
+    })
+    .then(()=>{
+        return req.user.clearCart();
+    })
+    .then(() =>{
+        res.redirect('/orders');
+    })
+    .catch(error => console.log(error))
 };
