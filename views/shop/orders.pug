@@ -15,20 +15,20 @@ block content
                             th Fiyatı 
                             th Adedi 
                     tbody 
-                        each product in order.items 
+                        each item in order.items 
                             tr 
                                 td
-                                    img(src=`/img/${product.imageUrl}` width="80")
-                                td #{product.name}
-                                td #{product.price}
-                                td #{product.quantity}
+                                    img(src=`/img/${item.product.imageUrl}` width="80")
+                                td #{item.product.name}
+                                td #{item.product.price}
+                                td #{item.quantity}
                     tfoot 
                         tr 
                             td(colspan="2") #{order.date}
                             td 
                                 - var totalPrice = 0;
-                                each product in order.items 
-                                    - totalPrice += (product.price * product.quantity)
+                                each item in order.items 
+                                    - totalPrice += (item.product.price * item.quantity)
                                 td #{totalPrice} TL
 
 
