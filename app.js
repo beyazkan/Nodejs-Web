@@ -12,6 +12,7 @@ app.set('views', './views');
 // Import Routes Modules
 const adminRoutes = require('./routes/admin.js');
 const userRoutes = require('./routes/shop.js');
+const accountRoutes = require('./routes/account.js');
 
 const errorController = require('./controllers/errors.js');
 //const mongoConnect = require('./utility/database.js').mongoConnect;
@@ -36,6 +37,7 @@ app.use((req,res,next) => {
 // Routes
 app.use('/admin', adminRoutes);
 app.use(userRoutes);
+app.use(accountRoutes);
 
 // 404 Hatası
 app.use(errorController.get404Page);
