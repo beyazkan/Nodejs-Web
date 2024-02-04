@@ -9,10 +9,12 @@ exports.postLogin = (req, res, next) =>{
     const email = req.body.email;
     const password = req.body.password;
     if((email == 'email@gmail.com') && (password == '1234')){
-        req.isAuthenticated = true;
+        // req.isAuthenticated = true;
+        res.cookie('isAuthenticated', true);
         res.redirect('/');
     }else{
-        req.isAuthenticated = false
+        // req.isAuthenticated = false
+        res.cookie('isAuthenticated', false);
         res.redirect('/login');
     }
 }

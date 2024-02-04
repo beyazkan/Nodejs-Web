@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const path = require('path');
 const mongoose = require('mongoose');
+const cookieParser = require('cookie-parser');
 
 const bodyParser = require('body-parser');
 
@@ -20,6 +21,7 @@ const errorController = require('./controllers/errors.js');
 const User = require('./models/user.js');
 
 app.use(bodyParser.urlencoded({extended:false}));
+app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use((req,res,next) => {
