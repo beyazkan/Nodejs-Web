@@ -6,7 +6,15 @@ exports.getLogin = (req, res, next) =>{
 }
 
 exports.postLogin = (req, res, next) =>{
-    res.redirect('/');
+    const email = req.body.email;
+    const password = req.body.password;
+    if((email == 'email@gmail.com') && (password == '1234')){
+        req.isAuthenticated = true;
+        res.redirect('/');
+    }else{
+        req.isAuthenticated = false
+        res.redirect('/login');
+    }
 }
 
 exports.getRegister = (req, res, next) =>{
@@ -28,5 +36,13 @@ exports.getReset = (req, res, next) =>{
 }
 
 exports.postReset = (req, res, next) =>{
+    res.redirect('/');
+}
+
+exports.getLogout = (req, res, next) =>{
+    res.redirect('/');
+}
+
+exports.postLogout = (req, res, next) =>{
     res.redirect('/');
 }

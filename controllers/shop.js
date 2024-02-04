@@ -12,7 +12,8 @@ exports.getIndex = (req, res, next) => {
                 title: 'Shopping', 
                 products: products,
                 categories: categories,
-                path: '/'
+                path: '/',
+                isAuthenticated: true
             });
        })
        .catch(error => console.log(error))
