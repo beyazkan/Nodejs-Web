@@ -3,6 +3,7 @@ const app = express();
 const path = require('path');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
+const session = require('express-session');
 
 const bodyParser = require('body-parser');
 
@@ -22,13 +23,18 @@ const User = require('./models/user.js');
 
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(cookieParser());
+app.use(session({
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: false
+}));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use((req,res,next) => {
     User.findOne({name: 'msoguz'})
     .then(user => {
         req.user = user;
-        console.log(req.user);
+        //console.log(req.user);
         next();
     })
     .catch(error => { console.log(error) })
@@ -61,7 +67,7 @@ mongoose.connect('mongodb://127.0.0.1/node-app')
             return user;
         })
         .then(user => {
-            console.log(user);
+            //console.log(user);
             app.listen(3000);
         })
         .catch(error => {
