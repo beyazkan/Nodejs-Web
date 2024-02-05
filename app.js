@@ -66,29 +66,6 @@ app.use(errorController.get404Page);
 
 mongoose.connect(connectionString)
     .then(() => {
-        console.log('Connected to mongodb');
-        User.findOne({name: 'msoguz'})
-        .then(user => {
-            if(!user){
-                user = new User({
-                    name: 'msoguz',
-                    email: 'mustafasabri.oguz@saglik.gov.tr',
-                    cart: {
-                        items: []
-                    }
-                });
-                return user.save();
-            }
-            return user;
-        })
-        .then(user => {
-            //console.log(user);
-            app.listen(3000);
-        })
-        .catch(error => {
-            console.log(error);
-        })
-
-        //app.listen(3000);
+        app.listen(3000);
     })
     .catch(error => console.log(error))

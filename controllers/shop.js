@@ -15,7 +15,7 @@ exports.getIndex = (req, res, next) => {
                 products: products,
                 categories: categories,
                 path: '/',
-                isAuthenticated: req.session.isAuthenticated === true
+                isAuthenticated: req.session.isAuthenticated
             });
        })
        .catch(error => console.log(error))

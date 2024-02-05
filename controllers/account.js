@@ -1,7 +1,10 @@
+const User = require('../models/user.js');
+
 exports.getLogin = (req, res, next) =>{
     res.render('account/login.pug', {
         path: '/login',
-        title: 'Giriş Yap'
+        title: 'Giriş Yap',
+        isAuthenticated: req.session.isAuthenticated
     });
 }
 
@@ -21,20 +24,47 @@ exports.postLogin = (req, res, next) =>{
 }
 
 exports.getRegister = (req, res, next) =>{
+    
     res.render('account/register.pug', {
         path: '/register',
-        title: 'Kayıt Ol'
+        title: 'Kayıt Ol',
+        isAuthenticated: req.session.isAuthenticated
     });
 }
 
 exports.postRegister = (req, res, next) =>{
-    res.redirect('/');
+    const name = req.body.name;
+    const email = req.body.email;
+    const password = req.body.password;
+    const passwordAgain = req.body.passwordAgain;
+
+    User.findOne({email: email})
+    .then(user => {
+        if(user){
+            return es.redirect('/register');
+        }
+        const newUser = new User({
+            name:name,
+            email: email,
+            password: password,
+            cart: { items: []}
+        });
+        return newUser.save();
+    })
+    .then(() => {
+        res.redirect('login');
+    })
+    .catch(error => console.log(error))
+    
+
+    res.redirect('/login');
 }
 
 exports.getReset = (req, res, next) =>{
     res.render('account/reset.pug', {
         path: '/reset-password',
-        title: 'Şifre Sıfırlama'
+        title: 'Şifre Sıfırlama',
+        isAuthenticated: req.session.isAuthenticated
     });
 }
 
