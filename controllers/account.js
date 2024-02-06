@@ -5,8 +5,7 @@ const bcrypt = require('bcrypt');
 exports.getLogin = (req, res, next) =>{
     res.render('account/login.pug', {
         path: '/login',
-        title: 'Giriş Yap',
-        isAuthenticated: req.session.isAuthenticated
+        title: 'Giriş Yap'
     });
 }
 
@@ -43,8 +42,7 @@ exports.getRegister = (req, res, next) =>{
     
     res.render('account/register.pug', {
         path: '/register',
-        title: 'Kayıt Ol',
-        isAuthenticated: req.session.isAuthenticated
+        title: 'Kayıt Ol'
     });
 }
 
@@ -80,8 +78,7 @@ exports.postRegister = (req, res, next) =>{
 exports.getReset = (req, res, next) =>{
     res.render('account/reset.pug', {
         path: '/reset-password',
-        title: 'Şifre Sıfırlama',
-        isAuthenticated: req.session.isAuthenticated
+        title: 'Şifre Sıfırlama'
     });
 }
 

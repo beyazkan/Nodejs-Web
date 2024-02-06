@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const mongoDbStore = require('connect-mongodb-session')(session);
+const csurf = require('csurf');
 
 const bodyParser = require('body-parser');
 
@@ -58,6 +59,7 @@ app.use((req,res,next) => {
     })
     .catch(error => { console.log(error) })
 })
+app.use(csurf());
 
 
 // Routes

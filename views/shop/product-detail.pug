@@ -13,6 +13,7 @@ block content
             .mb-3
                 h4.text-primary.mb-3 #{product.price} TL
                 form(action='/cart' method='POST')
+                    input(type="hidden" name="_csrf" value=`${csrfToken}`)
                     input(type='hidden' name='productId' value=`${product._id}`)
                     button(type='submit').btn.btn-primary.btn.lg Sepete Ekle
     .row
