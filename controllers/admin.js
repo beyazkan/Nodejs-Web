@@ -9,7 +9,6 @@ exports.getProducts = (req, res, next) => {
             .populate('userId', 'name -_id')
             .select('name price imageUrl userId')
             .then(products => {
-                console.log(products);
                 res.render('./admin/products.pug',{
                     title: 'Admin Product List',
                     products: products,
