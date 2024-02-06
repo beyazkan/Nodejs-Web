@@ -1,4 +1,5 @@
 const User = require('../models/user.js');
+const bcrypt = require('bcrypt');
 
 exports.getLogin = (req, res, next) =>{
     res.render('account/login.pug', {
@@ -41,23 +42,24 @@ exports.postRegister = (req, res, next) =>{
     User.findOne({email: email})
     .then(user => {
         if(user){
-            return es.redirect('/register');
+            return res.redirect('/register');
         }
+
+        return bcrypt.hash(password, 10);
+    })
+    .then(hashedPassword => {
         const newUser = new User({
             name:name,
             email: email,
-            password: password,
+            password: hashedPassword,
             cart: { items: []}
         });
         return newUser.save();
     })
     .then(() => {
-        res.redirect('login');
+        res.redirect('/login');
     })
     .catch(error => console.log(error))
-    
-
-    res.redirect('/login');
 }
 
 exports.getReset = (req, res, next) =>{
