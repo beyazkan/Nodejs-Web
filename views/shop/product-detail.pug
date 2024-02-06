@@ -11,8 +11,10 @@ block content
             //- a(href=`/categories/${product.categoryId}`).btn.btn-link.p-0.mb-3 #{categories[product.categoryId-1].name}
 
             .mb-3
-                h4.text-primary.mb-3 #{product.price} TL 
-                button(type="submit").btn.btn-primary.btn.lg Sepete Ekle
+                h4.text-primary.mb-3 #{product.price} TL
+                form(action='/cart' method='POST')
+                    input(type='hidden' name='productId' value=`${product._id}`)
+                    button(type='submit').btn.btn-primary.btn.lg Sepete Ekle
     .row
         .col-md-12
             hr

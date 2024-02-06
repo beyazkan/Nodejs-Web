@@ -1,3 +1,4 @@
+const session = require('express-session');
 const User = require('../models/user.js');
 const bcrypt = require('bcrypt');
 
@@ -25,8 +26,9 @@ exports.postLogin = (req, res, next) =>{
                 req.session.user = user;
                 req.session.isAuthenticated = true;
                 return req.session.save(function(error){
-                    console.log(error);
-                    res.redirect('/');
+                    var url = req.session.redirectTo || '/';
+                    delete req.session.redirectTo;
+                    res.redirect(url);
                 });
             }else{
                 res.redirect('/login');
@@ -88,7 +90,10 @@ exports.postReset = (req, res, next) =>{
 }
 
 exports.getLogout = (req, res, next) =>{
-    res.redirect('/');
+    req.session.destroy(err => {
+        console.log(err);
+        res.redirect('/');
+    });
 }
 
 exports.postLogout = (req, res, next) =>{
