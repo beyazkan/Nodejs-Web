@@ -14,7 +14,8 @@ exports.getIndex = (req, res, next) => {
                 title: 'Shopping', 
                 products: products,
                 categories: categories,
-                path: '/'
+                path: '/',
+                isAuthenticated: req.session.isAuthenticated
             });
        })
        .catch(error => console.log(error))
@@ -35,7 +36,8 @@ exports.getProducts = (req, res, next) => {
                 title: 'Products', 
                 products: products,
                 categories: categories,
-                path: '/products'
+                path: '/products',
+                isAuthenticated: req.session.isAuthenticated
             });
         })
     })
@@ -61,7 +63,8 @@ exports.getProductsByCategoryId = (req, res, next) => {
                 products: products,
                 categories: model.categories,
                 selectedCategory: categoryId,
-                path: '/categories'
+                path: '/categories',
+                isAuthenticated: req.session.isAuthenticated
             });
         })
     .catch((error)=>{
@@ -80,7 +83,8 @@ exports.getProduct = (req, res, next) => {
         res.render('shop/product-detail', {
             title:product.name,
             product: product,
-            path: '/products'
+            path: '/products',
+            isAuthenticated: req.session.isAuthenticated
         });
     })
     .catch(error => {
@@ -98,7 +102,8 @@ exports.getCart = (req, res, next) => {
             res.render('shop/cart', {
                 title: 'Cart', 
                 path: '/cart',
-                products: user.cart.items
+                products: user.cart.items,
+                isAuthenticated: req.session.isAuthenticated
         })
     })
     .catch(error => {
@@ -141,7 +146,8 @@ exports.getOrders = (req, res, next) => {
         res.render('shop/orders', {
             title: 'Orders', 
             path: '/orders',
-            orders: orders
+            orders: orders,
+            isAuthenticated: req.session.isAuthenticated
         });
     })
     .catch(error => {

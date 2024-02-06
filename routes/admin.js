@@ -8,29 +8,29 @@ const csrf = require('../middleware/csrf.js');
 const prefix_url = '/admin'
 
 //admin/add-product=> GET
-router.get('/add-product', csrf, adminController.getAddProduct);
+router.get('/add-product', csrf, isAuthenticated, adminController.getAddProduct);
 //admin/add-product=> POST
-router.post('/add-product', csrf, adminController.postAddProduct);
+router.post('/add-product', csrf, isAuthenticated, adminController.postAddProduct);
 
 //admin/edit-product=> GET
-router.get('/edit-product/:productid', csrf, adminController.getEditProduct);
+router.get('/edit-product/:productid', isAuthenticated, csrf, adminController.getEditProduct);
 //admin/edit-product=> POST
 
-router.post('/edit-product', csrf, adminController.postEditProduct);
-router.get('/products/:productid', csrf, adminController.getEditProduct);
+router.post('/edit-product', csrf, isAuthenticated, adminController.postEditProduct);
+router.get('/products/:productid', csrf, isAuthenticated, adminController.getEditProduct);
 
-router.get('/products', csrf, adminController.getProducts);
+router.get('/products', csrf, isAuthenticated, adminController.getProducts);
 
-router.post('/delete-product', csrf, adminController.postDeleteProduct);
+router.post('/delete-product', csrf, isAuthenticated, adminController.postDeleteProduct);
 
 // Kategori Sayfaları
-router.get('/add-category', csrf, adminController.getAddCategory);
-router.post('/add-category', csrf, adminController.postAddCategory);
-router.get('/edit-category/:categoryid', csrf, adminController.getEditCategory);
-router.post('/edit-category', csrf, adminController.postEditCategory);
-router.post('/delete-category', csrf, adminController.postDeleteCategory);
-router.get('/categories', csrf, adminController.getCategories);
+router.get('/add-category', csrf, isAuthenticated, adminController.getAddCategory);
+router.post('/add-category', csrf, isAuthenticated, adminController.postAddCategory);
+router.get('/edit-category/:categoryid', isAuthenticated, csrf, adminController.getEditCategory);
+router.post('/edit-category', csrf, isAuthenticated, adminController.postEditCategory);
+router.post('/delete-category', csrf, isAuthenticated, adminController.postDeleteCategory);
+router.get('/categories', csrf, isAuthenticated, adminController.getCategories);
 
-router.get('/', csrf, adminController.adminIndex);
+router.get('/', csrf, isAuthenticated, adminController.adminIndex);
 
 module.exports = router;

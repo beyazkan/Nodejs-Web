@@ -13,7 +13,8 @@ exports.getProducts = (req, res, next) => {
                     title: 'Admin Product List',
                     products: products,
                     path: '/admin/products',
-                    action: req.query.action
+                    action: req.query.action,
+                    isAuthenticated: req.session.isAuthenticated
                 });
             })
             .catch((error) => {
@@ -27,7 +28,8 @@ exports.getAddProduct = (req, res, next) => {
         res.render('./admin/add-product.pug', {
             title: 'Ürün Ekle',
             path: '/admin/add-product',
-            categories: categories
+            categories: categories,
+            isAuthenticated: req.session.isAuthenticated
         });
     })
     .catch(error => console.log(error))
@@ -82,7 +84,8 @@ exports.getEditProduct = (req, res, next) => {
                 title: 'Ürün Düzenle',
                 path: '/admin/edit-product',
                 product: product,
-                categories: categories
+                categories: categories,
+                isAuthenticated: req.session.isAuthenticated
             });    
         })
         .catch(error => console.log(error))
@@ -122,7 +125,8 @@ exports.postEditProduct = (req, res, next) => {
 exports.adminIndex = (req, res, next) => {
     res.render('./admin/index.pug', {
         title: 'Admin Anasayfa',
-        path: '/admin'
+        path: '/admin',
+        isAuthenticated: req.session.isAuthenticated
     });
 };
 
@@ -143,7 +147,8 @@ exports.postDeleteProduct = (req, res, next) => {
 exports.getAddCategory = (req, res, next) => {
     res.render('./admin/add-category.pug', {
         title: 'Kategori Ekle',
-        path: '/admin/add-category'
+        path: '/admin/add-category',
+        isAuthenticated: req.session.isAuthenticated
         //categories: categories
     });      
 };
@@ -173,7 +178,8 @@ exports.getCategories = (req, res, next) => {
             title: 'Kategoriler',
             path: '/admin/categories',
             categories: categories,
-            action: req.query.action
+            action: req.query.action,
+            isAuthenticated: req.session.isAuthenticated
         });      
     })
     .catch(error => { console.log(error) })
@@ -185,7 +191,8 @@ exports.getEditCategory = (req, res, next) => {
         res.render('./admin/edit-category.pug', {
             title: 'Kategori Düzenle',
             path: '/admin/add-category',
-            category: category
+            category: category,
+            isAuthenticated: req.session.isAuthenticated
         });      
     })
     .catch(error => {

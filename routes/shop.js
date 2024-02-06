@@ -9,11 +9,11 @@ router.get('/', csrf, shopController.getIndex);
 router.get('/products', csrf, shopController.getProducts);
 router.get('/product/details/:productid', csrf, shopController.getProduct);
 router.get('/categories/:categoryid', csrf, shopController.getProductsByCategoryId);
-router.get('/cart', csrf, shopController.getCart);
-router.post('/cart', csrf, shopController.postCart);
-router.post('/delete-cartItem', csrf, shopController.postCartItemDelete);
-router.get('/orders', csrf, shopController.getOrders);
-router.post('/create-order', csrf, shopController.postOrder);
+router.get('/cart', csrf, isAuthenticated, shopController.getCart);
+router.post('/cart', csrf, isAuthenticated, shopController.postCart);
+router.post('/delete-cartItem', csrf, isAuthenticated, shopController.postCartItemDelete);
+router.get('/orders', csrf, isAuthenticated, shopController.getOrders);
+router.post('/create-order', csrf, isAuthenticated, shopController.postOrder);
 
 
 module.exports = router;
