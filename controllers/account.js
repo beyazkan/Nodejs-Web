@@ -1,6 +1,10 @@
 const session = require('express-session');
 const User = require('../models/user.js');
 const bcrypt = require('bcrypt');
+const env = require('../utility/environment.js');
+const sgMail = require('@sendgrid/mail');
+
+sgMail.setApiKey(env.sendGridApiKey);
 
 exports.getLogin = (req, res, next) =>{
     var errorMessage = req.session.errorMessage;
@@ -83,10 +87,19 @@ exports.postRegister = (req, res, next) =>{
             password: hashedPassword,
             cart: { items: []}
         });
+
         return newUser.save();
     })
     .then(() => {
         res.redirect('/login');
+        const msg = {
+            to: email, // Change to your recipient
+            from: 'm.sabri.oguz@gmail.com', // Change to your verified sender
+            subject: 'Hesabınız oluşturuldu.',
+            html: '<strong>Hesabınız başarılı bir şekilde oluşturuldu.</strong>',
+        }
+
+        sgMail.send(msg);
     })
     .catch(error => console.log(error))
 }

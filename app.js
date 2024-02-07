@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const mongoDbStore = require('connect-mongodb-session')(session);
 const csurf = require('csurf');
+const env = require('./utility/environment.js');
 
 const bodyParser = require('body-parser');
 
@@ -22,7 +23,7 @@ const errorController = require('./controllers/errors.js');
 //const mongoConnect = require('./utility/database.js').mongoConnect;
 
 const User = require('./models/user.js');
-const connectionString = 'mongodb://127.0.0.1/node-app';
+const connectionString = env.localConnectionString;
 var store = new mongoDbStore({
     uri: connectionString,
     collection: 'mySessions'
