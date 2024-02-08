@@ -16,4 +16,7 @@ router.post('/reset-password', csrf, accountController.postReset);
 router.get('/logout', accountController.getLogout);
 router.post('/logout', accountController.postLogout);
 
+router.get('/reset-password/:token', csrf, accountController.getNewPassword);
+router.post('/new-password', csrf, accountController.postNewPassword);
+
 module.exports = router;

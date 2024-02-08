@@ -151,7 +151,7 @@ exports.postReset = (req, res, next) =>{
                 subject: 'Parola Sıfırlama.',
                 html: `<p> Parolanızı güncellemek için aşağıdaki linke tıklayınız.</p>
                 <p>
-                    <a href="http://localhost:3000/reset-password/${token}">Şifre Sıfırlama</a>
+                    <a href="http://localhost:3000/reset-password/${token}" target="_blank" >Şifre Sıfırlama</a>
                 </p>`,
             }
     
@@ -172,4 +172,52 @@ exports.getLogout = (req, res, next) =>{
 
 exports.postLogout = (req, res, next) =>{
     res.redirect('/');
+}
+
+exports.getNewPassword = (req, res, next) =>{
+    const token = req.params.token;
+
+    User.findOne({resetToken: token, resetTokenExpiration: { $gt: Date.now()}})
+    .then(user => {
+        var errorMessage = req.session.errorMessage;
+        delete req.session.errorMessage;
+
+        res.render('account/new-password.pug', {
+            path: '/new-password',
+            title: 'Şifre Oluştur',
+            errorMessage: errorMessage,
+            userId: user._id.toString(),
+            passwordToken: token
+        });
+    })
+    .catch(error => {console.log(error)})
+}
+
+exports.postNewPassword = (req, res, next) =>{
+    const newPassword = req.body.password;
+    const token = req.body.passwordToken;
+    const userId = req.body.userId;
+    let _user;
+
+    User.findOne({
+        resetToken: token, 
+        resetTokenExpiration:{
+            $gt: Date.now()
+        },
+        _id : userId
+    })
+    .then(user => {
+        _user = user;
+        return bcrypt.hash(newPassword, 10);
+    })
+    .then(hashedPassword => {
+        _user.password = hashedPassword;
+        _user.resetToken = undefined;
+        _user.resetTokenExpiration = undefined;
+        return _user.save();
+    })
+    .then(()=>{
+        res.redirect('/login')
+    })
+    .catch(error => console.log(error));
 }
