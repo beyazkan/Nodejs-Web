@@ -3,6 +3,7 @@ const User = require('../models/user.js');
 const bcrypt = require('bcrypt');
 const env = require('../utility/environment.js');
 const sgMail = require('@sendgrid/mail');
+const crypto = require('crypto');
 
 sgMail.setApiKey(env.sendGridApiKey);
 
@@ -105,14 +106,61 @@ exports.postRegister = (req, res, next) =>{
 }
 
 exports.getReset = (req, res, next) =>{
+    var errorMessage = req.session.errorMessage;
+    delete req.session.errorMessage;
+    
     res.render('account/reset.pug', {
         path: '/reset-password',
-        title: 'Şifre Sıfırlama'
+        title: 'Şifre Sıfırlama',
+        errorMessage: errorMessage
     });
 }
 
 exports.postReset = (req, res, next) =>{
-    res.redirect('/');
+
+    const email = req.body.email;
+
+    crypto.randomBytes(32, (error, buffer) => {
+        if(error){
+            console.log(error);
+            return res.redirect('/reset-password');
+        }
+        const token = buffer.toString('hex');
+        
+        User.findOne({email:email})
+        .then(user => {
+            if(!user){
+                req.session.errorMessage = 'Sistemde kayıtlı böyle bir email adresi bulunamamıştır.';
+                req.session.save(function(error){
+                    console.log(error);
+                    return res.redirect('/reset-password');
+                });
+            }
+
+            user.resetToken = token;
+            user.resetTokenExpiration = Date.now()+3600000;
+
+            return user.save();
+        })
+        .then(result => {
+            res.redirect('/');
+
+            const msg = {
+                to: email, // Change to your recipient
+                from: 'm.sabri.oguz@gmail.com', // Change to your verified sender
+                subject: 'Parola Sıfırlama.',
+                html: `<p> Parolanızı güncellemek için aşağıdaki linke tıklayınız.</p>
+                <p>
+                    <a href="http://localhost:3000/reset-password/${token}">Şifre Sıfırlama</a>
+                </p>`,
+            }
+    
+            sgMail.send(msg);
+        })
+        .catch(error => {
+            console.log(error);
+        })
+    })
 }
 
 exports.getLogout = (req, res, next) =>{
