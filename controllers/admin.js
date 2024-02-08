@@ -5,7 +5,7 @@ const category = require('../models/category.js');
 
 exports.getProducts = (req, res, next) => {
     Product
-            .find()
+            .find({userId: req.user._id})
             .populate('userId', 'name -_id')
             .select('name price imageUrl userId')
             .then(products => {
@@ -63,8 +63,11 @@ exports.postAddProduct = (req, res, next) => {
 };
 
 exports.getEditProduct = (req, res, next) => {
-    Product.findById(req.params.productid)
+    Product.findOne({_id: req.params.productid, userId: req.user._id})
     .then(product => {
+        if(!product){
+            return res.redirect('/');
+        }
         Category.find()
         .then(categories => {
             
@@ -107,7 +110,7 @@ exports.postEditProduct = (req, res, next) => {
     const description = req.body.description;
     const categoryIds = req.body.categoryids;
 
-    Product.updateOne({_id: id}, {
+    Product.updateOne({_id: id, userId: req.user._id}, {
         $set:{
             name: name,
             price: price,
@@ -132,7 +135,7 @@ exports.adminIndex = (req, res, next) => {
 
 exports.postDeleteProduct = (req, res, next) => {
     const productId = req.body.productid;
-    Product.deleteOne({_id: productId})
+    Product.deleteOne({_id: productId, userId: req.user._id})
     .then(() => {
         console.log('Product has been deleted.');
         res.redirect('/admin/products?action=delete');
@@ -223,7 +226,10 @@ exports.postEditCategory = (req, res, next) => {
 exports.postDeleteCategory = (req, res, next) => {
     const categoryId = req.body.categoryid;
     Category.deleteOne({_id: categoryId})
-    .then(() => {
+    .then((result) => {
+        if(result.deletedCount===0){
+            return res.redirect('/');
+        }
         console.log('Category has been deleted.');
         res.redirect('/admin/categories?action=delete');
     })
