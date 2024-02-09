@@ -3,7 +3,7 @@ module.exports = (req, res, next) => {
         // req.session.redirectTo = req.url;
         // req.session.redirectTo = req.protocol + '://' + req.get('host') + req.originalUrl;
         req.session.redirectTo = req.originalUrl;
-        console.log(req.session.redirectTo);
+        //console.log(req.session.redirectTo);
         return res.redirect('/login');
     }
 

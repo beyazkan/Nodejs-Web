@@ -5,7 +5,7 @@ const Order = require('../models/order.js');
 exports.getIndex = (req, res, next) => {
     // console.log(req.cookies);
     // console.log(req.cookies['isAuthenticated']);
-    console.log(req.session.isAuthenticated);
+    //console.log(req.session.isAuthenticated);
     Product.find()
     .then(products => {
        Category.find()
@@ -14,8 +14,7 @@ exports.getIndex = (req, res, next) => {
                 title: 'Shopping', 
                 products: products,
                 categories: categories,
-                path: '/',
-                isAuthenticated: req.session.isAuthenticated
+                path: '/'
             });
        })
        .catch(error => console.log(error))
@@ -36,8 +35,7 @@ exports.getProducts = (req, res, next) => {
                 title: 'Products', 
                 products: products,
                 categories: categories,
-                path: '/products',
-                isAuthenticated: req.session.isAuthenticated
+                path: '/products'
             });
         })
     })
@@ -63,8 +61,7 @@ exports.getProductsByCategoryId = (req, res, next) => {
                 products: products,
                 categories: model.categories,
                 selectedCategory: categoryId,
-                path: '/categories',
-                isAuthenticated: req.session.isAuthenticated
+                path: '/categories'
             });
         })
     .catch((error)=>{
@@ -83,8 +80,7 @@ exports.getProduct = (req, res, next) => {
         res.render('shop/product-detail', {
             title:product.name,
             product: product,
-            path: '/products',
-            isAuthenticated: req.session.isAuthenticated
+            path: '/products'
         });
     })
     .catch(error => {
@@ -102,8 +98,7 @@ exports.getCart = (req, res, next) => {
             res.render('shop/cart', {
                 title: 'Cart', 
                 path: '/cart',
-                products: user.cart.items,
-                isAuthenticated: req.session.isAuthenticated
+                products: user.cart.items
         })
     })
     .catch(error => {
@@ -146,8 +141,7 @@ exports.getOrders = (req, res, next) => {
         res.render('shop/orders', {
             title: 'Orders', 
             path: '/orders',
-            orders: orders,
-            isAuthenticated: req.session.isAuthenticated
+            orders: orders
         });
     })
     .catch(error => {
