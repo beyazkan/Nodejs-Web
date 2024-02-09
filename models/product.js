@@ -3,13 +3,20 @@ const mongoose = require('mongoose');
 const productSchema = mongoose.Schema({
     name: {
         type: String,
-        required: true
+        required: true,
+        minlength: 5,
+        maxlength: 255
     },
     price: {
         type:Number,
-        required: true
+        required: function(){ return this.isActive },
+        min: 0,
+        max: 10000
     },
-    description: String,
+    description: {
+        type: String,
+        minlength: 200
+    },
     imageUrl: String,
     date: {
         type: Date,
@@ -20,11 +27,16 @@ const productSchema = mongoose.Schema({
         ref: 'User',
         required: true
     },
-    categories:[{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Category',
-        required: false
-    }]
+    category:{
+        type: String,
+        enum:['telefon', 'bilgisayar']
+    },
+    isActive: Boolean
+    // categories:[{
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: 'Category',
+    //     required: false
+    // }]
 });
 
 module.exports = mongoose.model('Product', productSchema) // products

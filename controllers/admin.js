@@ -49,7 +49,9 @@ exports.postAddProduct = (req, res, next) => {
         imageUrl: imageUrl,
         description: description,
         userId: req.user,
-        categories: categories
+        //categories: categories,
+        categories: 'laptop',
+        isActive: true,
     });
     product.save()
     .then(result => {
