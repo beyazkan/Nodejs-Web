@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Product = require('./product.js');
+const validatorJS = require('validator');
 
 const userSchema = mongoose.Schema({
     name: {
@@ -8,7 +9,7 @@ const userSchema = mongoose.Schema({
     },
     email: {
         type: String,
-        required: true
+        validate: [validatorJS.isEmail, 'Lütfen geçerli bir email adresi giriniz.']
     },
     password: {
         type: String,

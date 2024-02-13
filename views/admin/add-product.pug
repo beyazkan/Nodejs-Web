@@ -4,20 +4,22 @@ block styles
     link(rel="stylesheet" href="/css/forms.css")
 
 block content
+    if errorMessage 
+        div.alert.alert-danger.col-sm-7 !{errorMessage}
     form(action="/admin/add-product" method="POST")
         input(type="hidden" name="_csrf" value=`${csrfToken}`)
         .form-group.row
             label(for="name").col-sm-2.col-form-label Product Name
             .col-sm-10
-                input(type="text" name="name").form-control#name
+                input(type="text" name="name" value=`${inputs.name ? inputs.name: ''}`).form-control#name
         .form-group.row
             label(for="price").col-sm-2.col-form-label Price
             .col-sm-10
-                input(type="text" name="price").form-control#price
+                input(type="text" name="price" value=`${inputs.price ? inputs.price: ''}`).form-control#price
         .form-group.row
             label(for="imageUrl").col-sm-2.col-form-label Image
             .col-sm-10
-                input(type="text" name="imageUrl").form-control#imageUrl
+                input(type="text" name="imageUrl" value=`${inputs.imageUrl ? inputs.imageUrl : ''}`).form-control#imageUrl
         .form-group.row
             label(for="category").col-sm-2.col-form-label Category
             .col-sm-10
@@ -28,7 +30,7 @@ block content
         .form-group.row
             label(for="description").col-sm-2.col-form-label Description
             .col-sm-10
-                textarea#description(name="description" cols="30" rows="10").form-control
+                textarea#description(name="description" cols="30" rows="10").form-control #{inputs.description ? inputs.description : ''}
         
         .form-group.row
             .col-sm-10.offset-sm-2

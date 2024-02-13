@@ -3,19 +3,24 @@ const mongoose = require('mongoose');
 const productSchema = mongoose.Schema({
     name: {
         type: String,
-        required: true,
-        minlength: 5,
-        maxlength: 255
+        required: [true, 'Ürün ismi zorunludur.'],
+        minlength: [5, 'Ürün ismi en az 5 karakterli olmalıdır.'],
+        maxlength: [255, 'Ürün ismi en fazla 255 karakterli olabilir.'],
+        lowercase: true,
+        //uppercase: true,
+        trim: true
     },
     price: {
         type:Number,
         required: function(){ return this.isActive },
         min: 0,
-        max: 10000
+        max: 10000,
+        get: value => Math.round(value),
+        set: value => Math.round(value)
     },
     description: {
         type: String,
-        minlength: 200
+        minlength: 10
     },
     imageUrl: String,
     date: {
@@ -27,16 +32,25 @@ const productSchema = mongoose.Schema({
         ref: 'User',
         required: true
     },
-    category:{
-        type: String,
-        enum:['telefon', 'bilgisayar']
+    // category:{
+    //     type: String,
+    //     enum:['telefon', 'bilgisayar']
+    // },
+    tags: {
+        type: Array,
+        validate: {
+            validator : function(value){
+                return value && value.length > 0;
+            },
+            message: 'ürün için en az bir etiket giriniz.'
+        }
     },
-    isActive: Boolean
-    // categories:[{
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: 'Category',
-    //     required: false
-    // }]
+    isActive: Boolean,
+    categories:[{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Category',
+        required: false
+    }]
 });
 
 module.exports = mongoose.model('Product', productSchema) // products

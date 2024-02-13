@@ -1,5 +1,6 @@
 const session = require('express-session');
 const User = require('../models/user.js');
+const Login = require('../models/login.js');
 const bcrypt = require('bcrypt');
 const env = require('../utility/environment.js');
 const sgMail = require('@sendgrid/mail');
@@ -20,8 +21,15 @@ exports.getLogin = (req, res, next) =>{
 exports.postLogin = (req, res, next) =>{
     const email = req.body.email;
     const password = req.body.password;
-    
-    User.findOne({email: email})
+
+    const loginModel = new Login({
+        email: email,
+        password: password
+    });
+
+    loginModel.validate()
+    .then(() => {
+        User.findOne({email: email})
     .then(user => {
         if(!user){
             req.session.errorMessage = "Sistemde kayıtlı mail adresi bulunamamıştır.";
@@ -43,12 +51,36 @@ exports.postLogin = (req, res, next) =>{
                     res.redirect(url);
                 });
             }else{
-                res.redirect('/login');
+                req.session.errorMessage = "Giriş bilgileriniz hatalı lütfen tekrar deneyiniz.";
+                req.session.save(function(error){
+                console.log(error);
+                return res.redirect('/login');
+            })
             }
         })
-        .catch(error => console.log(error))
+        .catch(error => {next(error);})
+        })
+        .catch(error => {next(error);})
     })
-    .catch(error => console.log(error))
+    .catch(error => {
+        let message = '';
+
+        if(error.name == 'ValidationError'){
+            for(field in error.errors){
+                message += error.errors[field].message + '<br>';
+            }
+            res.render('account/login.pug', {
+                path: '/login',
+                title: 'Giriş Yap',
+                errorMessage: message
+            });
+        }
+        else{
+            next(error);
+        }
+    });
+    
+    
 }
 
 exports.getRegister = (req, res, next) =>{
@@ -102,7 +134,23 @@ exports.postRegister = (req, res, next) =>{
 
         sgMail.send(msg);
     })
-    .catch(error => console.log(error))
+    .catch(error => {
+        let message = '';
+
+        if(error.name == 'ValidationError'){
+            for(field in error.errors){
+                message += error.errors[field].message + '<br>';
+            }
+            res.render('account/register.pug', {
+                path: '/register',
+                title: 'Kayıt Ol',
+                errorMessage: message
+            });
+        }
+        else{
+            next(error);
+        }
+    })
 }
 
 exports.getReset = (req, res, next) =>{
@@ -158,8 +206,22 @@ exports.postReset = (req, res, next) =>{
             sgMail.send(msg);
         })
         .catch(error => {
-            console.log(error);
-        })
+            let message = '';
+
+            if(error.name == 'ValidationError'){
+                for(field in error.errors){
+                    message += error.errors[field].message + '<br>';
+                }
+                res.render('account/reset.pug', {
+                    path: '/reset-password',
+                    title: 'Şifre Sıfırlama',
+                    errorMessage: message
+                });
+            }
+            else{
+                next(error);
+            }
+        });
     })
 }
 
@@ -190,7 +252,23 @@ exports.getNewPassword = (req, res, next) =>{
             passwordToken: token
         });
     })
-    .catch(error => {console.log(error)})
+    .catch(error => {
+        let message = '';
+
+            if(error.name == 'ValidationError'){
+                for(field in error.errors){
+                    message += error.errors[field].message + '<br>';
+                }
+                res.render('account/new-password.pug', {
+                    path: '/new-password',
+                    title: 'Şifre Oluştur',
+                    errorMessage: message
+                });
+            }
+            else{
+                next(error);
+            }
+    });
 }
 
 exports.postNewPassword = (req, res, next) =>{
@@ -219,5 +297,5 @@ exports.postNewPassword = (req, res, next) =>{
     .then(()=>{
         res.redirect('/login')
     })
-    .catch(error => console.log(error));
+    .catch(error => {next(error);});
 }

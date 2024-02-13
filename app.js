@@ -68,8 +68,12 @@ app.use('/admin', adminRoutes);
 app.use(userRoutes);
 app.use(accountRoutes);
 
-// 404 Hatası
+// Hata Sayfaları
+app.use(errorController.get500Page);
 app.use(errorController.get404Page);
+app.use((error, req, res, next) =>{
+    res.status(500).render('./errors/500.pug', {title:'Error'});
+})
 
 mongoose.connect(connectionString)
     .then(() => {

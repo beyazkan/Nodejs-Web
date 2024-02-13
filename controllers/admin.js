@@ -1,7 +1,7 @@
 const Product = require('../models/product.js');
 const Category = require('../models/category.js');
-const category = require('../models/category.js');
 // const User = require('../models/user.js');
+const mongoose = require('mongoose');
 
 exports.getProducts = (req, res, next) => {
     Product
@@ -17,7 +17,7 @@ exports.getProducts = (req, res, next) => {
                 });
             })
             .catch((error) => {
-                console.log(error);
+                next(error);
             });
 };
 
@@ -27,10 +27,11 @@ exports.getAddProduct = (req, res, next) => {
         res.render('./admin/add-product.pug', {
             title: 'Ürün Ekle',
             path: '/admin/add-product',
-            categories: categories
+            categories: categories,
+            inputs: {}
         });
     })
-    .catch(error => console.log(error))
+    .catch(error => {next(error);})
     
 };
 
@@ -44,21 +45,66 @@ exports.postAddProduct = (req, res, next) => {
     const categories = req.body.categoryids;
     
     const product = new Product({
+        _id: new mongoose.Types.ObjectId('65c9db11bf7c004ce0e934f4'),
         name: name,
         price: price,
         imageUrl: imageUrl,
         description: description,
         userId: req.user,
-        //categories: categories,
-        categories: 'laptop',
-        isActive: true,
+        categories: categories,
+        isActive: false,
+        tags: ['akıllı telefon']
     });
     product.save()
     .then(result => {
         res.redirect('/admin/products?action=create');
     })
     .catch((error) => {
-        console.log(error);
+        let message = '';
+
+        if(error.name == 'ValidationError'){
+            for(field in error.errors){
+                message += error.errors[field].message + '<br>';
+            }
+            Category.find()
+            .then(categories => {
+                res.render('./admin/add-product.pug', {
+                    title: 'Ürün Ekle',
+                    path: '/admin/add-product',
+                    categories: categories,
+                    errorMessage: message,
+                    inputs: {
+                        name: name,
+                        price: price,
+                        imageUrl: imageUrl,
+                        description: description
+                    }
+                });
+            })
+            .catch(error => {next(error);})
+            
+        }
+        else{
+            // Category.find()
+            // .then(categories => {
+            //     res.status(500).render('./admin/add-product.pug', {
+            //         title: 'Ürün Ekle',
+            //         path: '/admin/add-product',
+            //         categories: categories,
+            //         errorMessage: 'Beklenmedik bir hata oluştu. Lütfen tekrar deneyiniz.',
+            //         inputs: {
+            //             name: name,
+            //             price: price,
+            //             imageUrl: imageUrl,
+            //             description: description
+            //         }
+            //     });
+            // })
+            // .catch(error => console.log(error))    
+
+            //res.redirect('/500');
+            next(error);
+        }
     });
 };
 
@@ -93,7 +139,7 @@ exports.getEditProduct = (req, res, next) => {
         .catch(error => console.log(error))
     })
     .catch(error => {
-        console.log(error);
+        next(error);
     });    
 };
 
@@ -121,7 +167,9 @@ exports.postEditProduct = (req, res, next) => {
     .then(() => {
         res.redirect('/admin/products?action=edit')
     })
-    .catch(error => console.log(error));
+    .catch(error => {
+        next(error);
+    });
 };
 
 exports.adminIndex = (req, res, next) => {
@@ -139,7 +187,7 @@ exports.postDeleteProduct = (req, res, next) => {
         res.redirect('/admin/products?action=delete');
     })
     .catch((error)=> {
-        console.log(error);
+        next(error);
     });
     
 };
@@ -166,7 +214,7 @@ exports.postAddCategory = (req, res, next) => {
         res.redirect('/admin/categories?action=create');
     })
     .catch(error => {
-        console.log(error);
+        next(error);
     })
 };
 
@@ -180,7 +228,9 @@ exports.getCategories = (req, res, next) => {
             action: req.query.action
         });      
     })
-    .catch(error => { console.log(error) })
+    .catch(error => {
+        next(error);
+    })
 };
 
 exports.getEditCategory = (req, res, next) => {
@@ -193,7 +243,7 @@ exports.getEditCategory = (req, res, next) => {
         });      
     })
     .catch(error => {
-        console.log(error);
+        next(error);
     })
 };
 
@@ -213,7 +263,7 @@ exports.postEditCategory = (req, res, next) => {
         res.redirect('/admin/categories?action=edit');
     })
     .catch(error => {
-        console.log(error);
+        next(error);
     })
 };
 
@@ -228,7 +278,7 @@ exports.postDeleteCategory = (req, res, next) => {
         res.redirect('/admin/categories?action=delete');
     })
     .catch((error)=> {
-        console.log(error);
+        next(error);
     });
     
 };
