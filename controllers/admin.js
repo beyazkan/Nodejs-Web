@@ -207,15 +207,29 @@ exports.adminIndex = (req, res, next) => {
 
 exports.postDeleteProduct = (req, res, next) => {
     const productId = req.body.productid;
-    Product.deleteOne({_id: productId, userId: req.user._id})
-    .then(() => {
-        console.log('Product has been deleted.');
-        res.redirect('/admin/products?action=delete');
+
+    Product.findOne({_id: productId, userId: req.user._id})
+    .then(product => {
+        if(!product){
+            return next(new Error('Silinmek istenen ürün bulunamadı.'));
+        }
+        fs.unlink('./public/img/' + product.imageUrl, error => {
+            if(error){
+                console.log(error);
+            }
+        });
+
+        return Product.deleteOne({_id: productId, userId: req.user._id})
+        .then((result) => {
+            if(result.deletedCount === 0){
+                return next(new Error('Silinmek istenen ürün bulunamadı.'));
+            }
+            res.redirect('/admin/products?action=delete');
+        })
+        .catch((error)=> {
+            next(error);
+        });
     })
-    .catch((error)=> {
-        next(error);
-    });
-    
 };
 
 // Category

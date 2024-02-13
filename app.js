@@ -83,6 +83,7 @@ app.use(accountRoutes);
 app.use(errorController.get500Page);
 app.use(errorController.get404Page);
 app.use((error, req, res, next) =>{
+    console.log(error);
     res.status(500).render('./errors/500.pug', {title:'Error'});
 })
 
