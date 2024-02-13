@@ -45,7 +45,6 @@ exports.postAddProduct = (req, res, next) => {
     const categories = req.body.categoryids;
     
     const product = new Product({
-        _id: new mongoose.Types.ObjectId('65c9db11bf7c004ce0e934f4'),
         name: name,
         price: price,
         imageUrl: imageUrl,
