@@ -40,15 +40,28 @@ exports.postAddProduct = (req, res, next) => {
 
     const name = req.body.name;
     const price = req.body.price;
-    const file = req.file;
+    const image = req.file;
     const description = req.body.description;
     const categories = req.body.categoryids;
-    console.log(file);
+    
+    if(!image){
+        return res.render('./admin/add-product.pug', {
+                title: 'Ürün Ekle',
+                path: '/admin/add-product',
+                categories: [{_id:1, name:'Telefon'}, {_id:2, name:'Bilgisayar'}],
+                errorMessage: 'Lütfen bir resim seçiniz.',
+                inputs: {
+                    name: name,
+                    price: price,
+                    description: description
+                }
+        });
+    }
     
     const product = new Product({
         name: name,
         price: price,
-        imageUrl: file.filename,
+        imageUrl: image.filename,
         description: description,
         userId: req.user,
         categories: categories,
@@ -151,18 +164,23 @@ exports.postEditProduct = (req, res, next) => {
     const id = req.body.id;
     const name = req.body.name;
     const price = req.body.price;
-    const imageUrl = req.body.imageUrl;
+    const image = req.file;
     const description = req.body.description;
     const categoryIds = req.body.categoryids;
 
+    const product = {
+        name: name,
+        price: price,
+        description: description,
+        categories: categoryIds
+    };
+
+    if(image){
+        product.imageUrl = image.filename;
+    }
+
     Product.updateOne({_id: id, userId: req.user._id}, {
-        $set:{
-            name: name,
-            price: price,
-            imageUrl: imageUrl,
-            description: description,
-            categories: categoryIds
-        }
+        $set:product
     })
     .then(() => {
         res.redirect('/admin/products?action=edit')

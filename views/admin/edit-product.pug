@@ -18,7 +18,8 @@ block content
         .form-group.row
             label(for="image").col-sm-2.col-form-label Image
             .col-sm-10
-                input(type="file" name="image" value=`${product.imageUrl}`).form-control#image
+                img(src=`/img/${product.imageUrl}` width="100")
+                input(type="file" name="image" value=`${product.imageUrl}`)#image
         .form-group.row
             label(for="category").col-sm-2.col-form-label Category
             .col-sm-10
