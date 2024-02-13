@@ -2,6 +2,7 @@ const Product = require('../models/product.js');
 const Category = require('../models/category.js');
 // const User = require('../models/user.js');
 const mongoose = require('mongoose');
+const fs = require('fs');
 
 exports.getProducts = (req, res, next) => {
     Product
@@ -168,21 +169,28 @@ exports.postEditProduct = (req, res, next) => {
     const description = req.body.description;
     const categoryIds = req.body.categoryids;
 
-    const product = {
-        name: name,
-        price: price,
-        description: description,
-        categories: categoryIds
-    };
+    Product.findOne({_id: id, userId: req.user._id})
+    .then(product => {
+        if(!product){
+            res.redirect('/');
+        }
+        product.name = name;
+        product.price = price;
+        product.description = description;
+        product.categories = categoryIds;
 
-    if(image){
-        product.imageUrl = image.filename;
-    }
-
-    Product.updateOne({_id: id, userId: req.user._id}, {
-        $set:product
+        if(image){
+            // Eski Resmi Sil
+            fs.unlink('./public/img/' + product.imageUrl, error => {
+                if(error){
+                    console.log(error);
+                }
+            });
+            product.imageUrl = image.filename;
+        }
+        return product.save();
     })
-    .then(() => {
+    .then(result => {
         res.redirect('/admin/products?action=edit')
     })
     .catch(error => {
