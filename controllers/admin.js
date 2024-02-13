@@ -40,14 +40,15 @@ exports.postAddProduct = (req, res, next) => {
 
     const name = req.body.name;
     const price = req.body.price;
-    const imageUrl = req.body.imageUrl;
+    const file = req.file;
     const description = req.body.description;
     const categories = req.body.categoryids;
+    console.log(file);
     
     const product = new Product({
         name: name,
         price: price,
-        imageUrl: imageUrl,
+        imageUrl: file.filename,
         description: description,
         userId: req.user,
         categories: categories,

@@ -4,7 +4,7 @@ block styles
     link(rel="stylesheet" href="/css/forms.css")
 
 block content
-    form(action="/admin/edit-product" method="POST")
+    form(action="/admin/edit-product" method="POST" enctype="multipart/form-data")
         input(type="hidden" name="_csrf" value=`${csrfToken}`)
         input#id(type="hidden" name="id" value=`${product._id}`)
         .form-group.row
@@ -16,9 +16,9 @@ block content
             .col-sm-10
                 input(type="text" name="price" value=`${product.price}`).form-control#price
         .form-group.row
-            label(for="imageUrl").col-sm-2.col-form-label Image
+            label(for="image").col-sm-2.col-form-label Image
             .col-sm-10
-                input(type="text" name="imageUrl" value=`${product.imageUrl}`).form-control#imageUrl
+                input(type="file" name="image" value=`${product.imageUrl}`).form-control#image
         .form-group.row
             label(for="category").col-sm-2.col-form-label Category
             .col-sm-10
